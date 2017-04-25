@@ -177,7 +177,7 @@ function sydney_customize_register( $wp_customize ) {
     $wp_customize->add_setting(
         'mobile_slider',
         array(
-            'default'           => 'fullscreen',
+            'default'           => 'responsive',
             'sanitize_callback' => 'sydney_sanitize_mslider',
         )
     );
@@ -265,14 +265,14 @@ function sydney_customize_register( $wp_customize ) {
     $wp_customize->add_setting(
         'slider_title_1',
         array(
-            'default' => __('Les joies de la ferme','sydney'),
+            'default' => __('Welcome','sydney'),
             'sanitize_callback' => 'sydney_sanitize_text',
         )
     );
     $wp_customize->add_control(
         'slider_title_1',
         array(
-            'label' => __( 'pour les familles', 'sydney' ),
+            'label' => __( 'Title for the first slide', 'sydney' ),
             'section' => 'sydney_slider',
             'type' => 'text',
             'priority' => 12
@@ -282,7 +282,7 @@ function sydney_customize_register( $wp_customize ) {
     $wp_customize->add_setting(
         'slider_subtitle_1',
         array(
-            'default' => __('Sous la protection de Marie','sydney'),
+            'default' => __('Feel free to look around','sydney'),
             'sanitize_callback' => 'sydney_sanitize_text',
         )
     );
