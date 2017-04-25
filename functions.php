@@ -5,6 +5,39 @@
  * @package accueilalaferme
  */
 
+//////////////////////////////////
+// Fonctions Accueil à la ferme //
+//////////////////////////////////
+
+add_action('send_headers', 'site_router');
+
+function site_router() {
+    $root = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+    $url = str_replace($root, '', $_SERVER['REQUEST_URI']);
+    $url = explode('/', $url);
+
+    if (count($url)==1 && $url[0] == 'login') {
+        require 'tpl-login.php';
+        die();
+    } else if (count($url)==1 && $url[0] == 'profil') {
+        require 'tpl-profil.php';
+        die();
+    } else if (count($url)==1 && $url[0] == 'register') {
+        require 'tpl-register.php';
+        die();
+    } else if (count($url)==1 && $url[0] == 'logout') {
+        wp_logout();
+        header('Location:'.$root);
+        die();
+    }
+
+}
+
+// add_filter('show_admin_bar', '__return_false');
+
+//////////////////
+// Sydney stuff //
+//////////////////
 
 if ( ! function_exists( 'sydney_setup' ) ) :
 /**
@@ -401,3 +434,5 @@ require_once dirname( __FILE__ ) . '/plugins/class-tgm-plugin-activation.php';
     // tgmpa( $plugins);
 
 // }
+
+

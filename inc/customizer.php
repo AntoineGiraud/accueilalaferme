@@ -144,7 +144,7 @@ function sydney_customize_register( $wp_customize ) {
     $wp_customize->add_setting(
         'site_header_type',
         array(
-            'default'           => 'image',
+            'default'           => 'nothing',
             'sanitize_callback' => 'sydney_sanitize_layout',
         )
     );

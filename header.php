@@ -40,15 +40,31 @@
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo('name'); ?>"><img class="site-logo" src="<?php echo esc_url(get_theme_mod('site_logo')); ?>" alt="<?php bloginfo('name'); ?>" /></a>
 		        <?php else : ?>
 					<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-					<h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>	        
+					<h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
 		        <?php endif; ?>
 				</div>
 				<div class="col-md-8 col-sm-4 col-xs-12">
 					<div class="btn-menu"></div>
 					<nav id="mainnav" class="mainnav" role="navigation">
 						<?php wp_nav_menu( array( 'theme_location' => 'primary', 'fallback_cb' => 'sydney_menu_fallback' ) ); ?>
-					</nav><!-- #site-navigation -->
-				</div>
+                        <?php $user = wp_get_current_user(); ?>
+                        <div class="menu-principal-container">
+                            <ul class="menu">
+                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a><span class="btn-submenu"></span>
+                                    <ul class="sub-menu" style="display: none;">
+                                        <?php if (!$user->ID): ?>
+                                            <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= bloginfo('url') ?>/login">Se connecter</a></li>
+                                            <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= bloginfo('url') ?>/register">S'inscrire</a></li>
+                                        <?php else: ?>
+                                            <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= bloginfo('url') ?>/profil">Profil <small><em><?= $user->user_login ?></em></small></a></li>
+                                            <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= bloginfo('url') ?>/logout">Se déconnecter</a></li>
+                                        <?php endif ?>
+                                    </ul>
+                                </li>
+                            </ul>
+				        </div>
+                    </nav><!-- #site-navigation -->
+                </div>
 				</div>
 			</div>
 		</div>
@@ -71,4 +87,4 @@
 
 	<div id="content" class="page-wrap">
 		<div class="container content-wrapper">
-			<div class="row">	
+			<div class="row">
