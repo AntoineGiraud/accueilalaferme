@@ -1,8 +1,8 @@
 <?php
 /**
- * Sydney functions and definitions
+ * accueilalaferme functions and definitions
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 
 
@@ -203,7 +203,7 @@ function sydney_google_fonts() {
 		), 'https://fonts.googleapis.com/css' );
 	}
 
-	return $fonts_url;	
+	return $fonts_url;
 }
 endif;
 
@@ -309,7 +309,7 @@ function sydney_header_clone() {
 	$site_header_type 	=get_theme_mod('site_header_type');
 
 	if ( ( $front_header_type == 'nothing' && is_front_page() ) || ( $site_header_type == 'nothing' && !is_front_page() ) ) { ?>
-	
+
 	<div class="header-clone"></div>
 
 	<?php }
@@ -381,23 +381,23 @@ require_once dirname( __FILE__ ) . '/demo-content/setup.php';
  */
 require_once dirname( __FILE__ ) . '/plugins/class-tgm-plugin-activation.php';
 
-add_action( 'tgmpa_register', 'sydney_recommend_plugin' );
-function sydney_recommend_plugin() {
+// add_action( 'tgmpa_register', 'sydney_recommend_plugin' );
+// function sydney_recommend_plugin() {
 
-    $plugins[] = array(
-            'name'               => 'Page Builder by SiteOrigin',
-            'slug'               => 'siteorigin-panels',
-            'required'           => false,
-    );
+ //    $plugins[] = array(
+ //            'name'               => 'Page Builder by SiteOrigin',
+ //            'slug'               => 'siteorigin-panels',
+ //            'required'           => false,
+ //    );
 
-	if ( !function_exists('wpcf_init') ) {
-	    $plugins[] = array(
-		        'name'               => 'Sydney Toolbox - custom posts and fields for the Sydney theme',
-		        'slug'               => 'sydney-toolbox',
-		        'required'           => false,
-		);
-	}
+	// if ( !function_exists('wpcf_init') ) {
+	//     $plugins[] = array(
+	// 	        'name'               => 'Sydney Toolbox - custom posts and fields for the Sydney theme',
+	// 	        'slug'               => 'sydney-toolbox',
+	// 	        'required'           => false,
+	// 	);
+	// }
 
-    tgmpa( $plugins);
+    // tgmpa( $plugins);
 
-}
+// }

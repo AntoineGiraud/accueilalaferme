@@ -1,18 +1,15 @@
 /*
-Theme Name: Sydney
-Theme URI: http://athemes.com/theme/sydney
-Author: aThemes
-Author URI: http://athemes.com
-Description: Sydney is a powerful business theme that provides a fast way for companies or freelancers to create an awesome online presence. Sydney brings plenty of customization possibilities like access to all Google Fonts, full color control, layout control, logo upload, full screen slider, header image, sticky navigation and much more. Also, Sydney provides all the construction blocks you need to rapidly create an engaging front page.
-Version: 1.38
+Theme Name: Accueil à la ferme
+Theme URI: https://github.com/AntoineGiraud/accueilalaferme
+Author: AntoineGiraud
+Author URI: https://github.com/AntoineGiraud
+Description: Thème basé pour le moment syr le thème Sydney: http://athemes.com/theme/sydney, pour le site Accueil à la ferme: http://accueilalaferme.org
+Version: 0.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: sydney
+Text Domain: accueilalaferme
 Tags: two-columns, right-sidebar, custom-colors, custom-background, custom-header, custom-menu, featured-images, sticky-post, theme-options, threaded-comments, translation-ready
 
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned with others.
-Sydney is based on Underscores http://underscores.me/, (C) 2012-2015 Automattic, Inc.
 */
 
 
@@ -617,7 +614,7 @@ Header
 	}
 	.admin-bar:not(.siteScrolled) .slide-item {
 		background-position: 50% 0 !important;
-	}	
+	}
 	.header-image {
 		display: none;
 		position: relative;
@@ -640,7 +637,7 @@ Header
 	}
 	.site-description:empty {
 		margin: 0;
-	}	
+	}
 	.site-header.fixed {
 		position: fixed;
 	}
@@ -1707,7 +1704,7 @@ Preloader
 	    text-align: center;
 	    transition: opacity 0.2s ease 0s;
 	    width: 100%;
-	    z-index: 9999;	    
+	    z-index: 9999;
 	}
 	.preloader .spinner {
 	    height: 30px;
@@ -2991,7 +2988,7 @@ Panels
 /* Lightbox video
 -------------------------------------------------------------- */
 .sydney-video .video-text,
-.sydney-video .toggle-popup, 
+.sydney-video .toggle-popup,
 .sydney-video .close-popup {
 	display: none;
 }
@@ -3130,12 +3127,12 @@ Panels
   		}
 		.blog-post:nth-of-type(2n+1) {
 		    clear: left;
-		}  				
+		}
 	}
 	@media only screen and (max-width: 1024px) {
 		.site-header.fixed {
 			position: static !important;
-		}		
+		}
 		.slides-container .slide-item,
 		.panel-row-style {
 			background-attachment: scroll !important;
@@ -3165,7 +3162,7 @@ Panels
 		}
 		.header-clone {
 			display: none;
-		}		
+		}
 		.posts-navigation {
 			overflow: hidden;
 			margin-bottom: 30px;
