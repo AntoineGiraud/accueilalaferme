@@ -20,33 +20,33 @@ function sydney_slider_template() {
     //Slider text
     if ( !function_exists('pll_register_string') ) {
     	$titles = array(
-    		'slider_title_1' => get_theme_mod('slider_title_1', 'Welcome to Sydney'),
-    		'slider_title_2' => get_theme_mod('slider_title_2', 'Ready to begin your journey?'),
+    		'slider_title_1' => get_theme_mod('slider_title_1', 'Les joies de la ferme'),
+            'slider_title_2' => get_theme_mod('slider_title_2', 'Sous la protection de Marie'),
     		'slider_title_3' => get_theme_mod('slider_title_3'),
     		'slider_title_4' => get_theme_mod('slider_title_4'),
     		'slider_title_5' => get_theme_mod('slider_title_5'),
     	);
     	$subtitles = array(
-    		'slider_subtitle_1' => get_theme_mod('slider_subtitle_1', 'Feel free to look around'),
-    		'slider_subtitle_2' => get_theme_mod('slider_subtitle_2', 'Feel free to look around'),
+    		'slider_subtitle_1' => get_theme_mod('slider_subtitle_1', 'pour les familles'),
+    		'slider_subtitle_2' => get_theme_mod('slider_subtitle_2', ''),
     		'slider_subtitle_3' => get_theme_mod('slider_subtitle_3'),
     		'slider_subtitle_4' => get_theme_mod('slider_subtitle_4'),
-    		'slider_subtitle_5' => get_theme_mod('slider_subtitle_5'),    		
+    		'slider_subtitle_5' => get_theme_mod('slider_subtitle_5'),
     	);
     } else {
     	$titles = array(
-    		'slider_title_1' => pll__( get_theme_mod('slider_title_1', 'Welcome to Sydney') ),
-    		'slider_title_2' => pll__( get_theme_mod('slider_title_2', 'Ready to begin your journey?') ),
+    		'slider_title_1' => pll__( get_theme_mod('slider_title_1', 'Les joies de la ferme') ),
+    		'slider_title_2' => pll__( get_theme_mod('slider_title_2', 'Sous la protection de Marie') ),
     		'slider_title_3' => pll__( get_theme_mod('slider_title_3') ),
     		'slider_title_4' => pll__( get_theme_mod('slider_title_4') ),
     		'slider_title_5' => pll__( get_theme_mod('slider_title_5') ),
     	);
     	$subtitles = array(
-    		'slider_subtitle_1' => pll__( get_theme_mod('slider_subtitle_1', 'Feel free to look around') ),
-    		'slider_subtitle_2' => pll__( get_theme_mod('slider_subtitle_2', 'Feel free to look around') ),
+    		'slider_subtitle_1' => pll__( get_theme_mod('slider_subtitle_1', 'pour les familles') ),
+    		'slider_subtitle_2' => pll__( get_theme_mod('slider_subtitle_2', '') ),
     		'slider_subtitle_3' => pll__( get_theme_mod('slider_subtitle_3') ),
     		'slider_subtitle_4' => pll__( get_theme_mod('slider_subtitle_4') ),
-    		'slider_subtitle_5' => pll__( get_theme_mod('slider_subtitle_5') ),    		
+    		'slider_subtitle_5' => pll__( get_theme_mod('slider_subtitle_5') ),
     	);
     }
     $images = array(
@@ -82,7 +82,7 @@ function sydney_slider_template() {
         }
         ?>
 
-        </div>  
+        </div>
         <?php if ( $text_slide ) : ?>
             <?php echo sydney_stop_text(); ?>
         <?php endif; ?>
@@ -96,10 +96,10 @@ endif;
 function sydney_slider_button() {
 
     if ( !function_exists('pll_register_string') ) {
-        $slider_button      = get_theme_mod('slider_button_text', 'Click to begin');
-        $slider_button_url  = get_theme_mod('slider_button_url','#primary');        
+        $slider_button      = get_theme_mod('slider_button_text', 'Découvrir');
+        $slider_button_url  = get_theme_mod('slider_button_url','#primary');
     } else {
-        $slider_button      = pll__(get_theme_mod('slider_button_text', 'Click to begin'));
+        $slider_button      = pll__(get_theme_mod('slider_button_text', 'Découvrir'));
         $slider_button_url  = pll__(get_theme_mod('slider_button_url','#primary'));
     }
 
@@ -112,20 +112,20 @@ function sydney_slider_button() {
 function sydney_stop_text() {
 
     if ( !function_exists('pll_register_string') ) {
-        $slider_title_1     = get_theme_mod('slider_title_1', 'Welcome to Sydney');
-        $slider_subtitle_1  = get_theme_mod('slider_subtitle_1','Feel free to look around');
+        $slider_title_1     = get_theme_mod('slider_title_1', 'Les joies de la ferme');
+        $slider_subtitle_1  = get_theme_mod('slider_subtitle_1','pour les familles');
     } else {
-        $slider_title_1     = pll__(get_theme_mod('slider_title_1', 'Welcome to Sydney'));
-        $slider_subtitle_1  = pll__(get_theme_mod('slider_subtitle_1','Feel free to look around')); 
+        $slider_title_1     = pll__(get_theme_mod('slider_title_1', 'Sous la protection de Marie'));
+        $slider_subtitle_1  = pll__(get_theme_mod('slider_subtitle_1',''));
     }
 
-    ?>    
+    ?>
     <div class="slide-inner text-slider-stopped">
         <div class="contain text-slider">
             <h2 class="maintitle"><?php echo esc_html($slider_title_1); ?></h2>
             <p class="subtitle"><?php echo esc_html($slider_subtitle_1); ?></p>
         </div>
         <?php echo sydney_slider_button(); ?>
-    </div>   
-    <?php 
+    </div>
+    <?php
 }

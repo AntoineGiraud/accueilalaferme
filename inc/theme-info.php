@@ -20,7 +20,7 @@ function sydney_info_page() {
 		<div class="info-block"><div class="dashicons dashicons-desktop info-icon"></div><p class="info-text"><a href="http://demo.athemes.com/sydney" target="_blank"><?php _e('Theme demo','sydney'); ?></a></p></div>
 		<div class="info-block"><div class="dashicons dashicons-book-alt info-icon"></div><p class="info-text"><a href="http://athemes.com/documentation/sydney" target="_blank"><?php _e('Documentation','sydney'); ?></a></p></div>
 		<div class="info-block"><div class="dashicons dashicons-sos info-icon"></div><p class="info-text"><a href="http://athemes.com/forums" target="_blank"><?php _e('Support','sydney'); ?></a></p></div>
-		<div class="info-block"><div class="dashicons dashicons-smiley info-icon"></div><p class="info-text"><a href="http://athemes.com/theme/sydney-pro" target="_blank"><?php _e('Pro version','sydney'); ?></a></p></div>	
+		<div class="info-block"><div class="dashicons dashicons-smiley info-icon"></div><p class="info-text"><a href="http://athemes.com/theme/sydney-pro" target="_blank"><?php _e('Pro version','sydney'); ?></a></p></div>
 	</div>
 <?php
 }
