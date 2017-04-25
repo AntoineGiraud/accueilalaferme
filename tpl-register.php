@@ -29,7 +29,10 @@ if (!empty($_POST)) {
             $msg = 'Vous êtes désormais inscrit au site Accueil à la ferme :)';
             $headers = 'From:'.get_option('admin_email')."\r\n";
             wp_mail($d['user_email'], 'Inscription réussie à Accueil à la ferme', $msg, $headers);
-            wp_signon();
+            wp_signon([
+                'user_login' => $d['user_login'],
+                'user_password' => $d['user_pass']
+            ]);
             header('Location:profil');
         }
     }
@@ -63,15 +66,15 @@ get_header();
                         </div>
                         <div class="form-group">
                             <label for="last_name">Votre nom</label>
-                            <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nome">
+                            <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom">
                         </div>
                         <div class="form-group">
                             <label for="user_pass">Votre mot de passe</label>
-                            <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Password">
+                            <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Mot de passe">
                         </div>
                         <div class="form-group">
                             <label for="user_pass2">Confirmez votre mot de passe</label>
-                            <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Password">
+                            <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Mot de passe">
                         </div>
                         <button type="submit" class="btn btn-default">S'inscrire</button>
                     </form>
