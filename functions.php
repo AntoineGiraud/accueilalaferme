@@ -20,6 +20,10 @@ function site_router() {
         add_filter('show_admin_bar', '__return_false');
         require 'tpl-login.php';
         die();
+    } else if (count($url)==1 && $url[0] == 'famille') {
+        add_filter('show_admin_bar', '__return_false');
+        require 'tpl-famille.php';
+        die();
     } else if (count($url)==1 && $url[0] == 'profil') {
         add_filter('show_admin_bar', '__return_false');
         require 'tpl-profil.php';
@@ -46,6 +50,7 @@ function add_last_nav_item($items) {
                 <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; S'inscrire</a></li>
             <?php else: ?>
                 <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $user->user_login ?></em></small></a></li>
+                <li id="famille" class="menu-item menu-item-type-custom menu-item-object-custom famille"><a href="<?= $blogUrl ?>/famille"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Famille <small><em><?= $user->user_lastname ?></em></small></a></li>
                 <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp; Se déconnecter</a></li>
             <?php endif ?>
         </ul>
