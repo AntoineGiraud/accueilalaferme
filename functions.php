@@ -39,11 +39,11 @@ function add_last_nav_item($items) {
     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a>
         <ul class="sub-menu" style="display: none;">
             <?php if (!$user->ID): ?>
-                <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login">Se connecter</a></li>
-                <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register">S'inscrire</a></li>
+                <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp; Se connecter</a></li>
+                <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; S'inscrire</a></li>
             <?php else: ?>
-                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil">Profil <small><em><?= $user->user_login ?></em></small></a></li>
-                <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout">Se déconnecter</a></li>
+                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $user->user_login ?></em></small></a></li>
+                <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp; Se déconnecter</a></li>
             <?php endif ?>
         </ul>
     </li>
@@ -221,6 +221,7 @@ function sydney_scripts() {
 	wp_enqueue_style( 'sydney-ie9', get_template_directory_uri() . '/css/ie9.css', array( 'sydney-style' ) );
 	wp_style_add_data( 'sydney-ie9', 'conditional', 'lte IE 9' );
 
+    wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/css/bootstrap/js/bootstrap.min.js', array('jquery'),'', true );
 	wp_enqueue_script( 'sydney-scripts', get_template_directory_uri() . '/js/scripts.js', array('jquery'),'', true );
 
 	wp_enqueue_script( 'sydney-main', get_template_directory_uri() . '/js/main.min.js', array('jquery'),'20170329', true );
@@ -264,7 +265,7 @@ endif;
  * Enqueue Bootstrap
  */
 function sydney_enqueue_bootstrap() {
-	wp_enqueue_style( 'sydney-bootstrap', get_template_directory_uri() . '/css/bootstrap/bootstrap.min.css', array(), true );
+	wp_enqueue_style( 'sydney-bootstrap', get_template_directory_uri() . '/css/bootstrap/css/bootstrap.min.css', array(), true );
 }
 add_action( 'wp_enqueue_scripts', 'sydney_enqueue_bootstrap', 9 );
 

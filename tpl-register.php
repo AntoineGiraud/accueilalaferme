@@ -51,32 +51,48 @@ get_header();
                 <?php endif ?>
 
 				<div class="page-content">
-                    <form class="form" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
+                    <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                         <div class="form-group">
-                            <label for="user_login">Votre identifiant</label>
-                            <input type="text" value="<?= !empty($d['user_login'])?$d['user_login']:'' ?>" name="user_login" class="form-control" id="user_login" placeholder="Identifiant">
+                            <label class="col-sm-2 control-label" for="user_login">Identifiant</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?= !empty($d['user_login'])?$d['user_login']:'' ?>" name="user_login" class="form-control" id="user_login" placeholder="Identifiant">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_email">Votre email</label>
-                            <input type="email" value="<?= !empty($d['user_email'])?$d['user_email']:'' ?>" name="user_email" class="form-control" id="user_email" placeholder="Email">
+                            <label class="col-sm-2 control-label" for="user_email">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" value="<?= !empty($d['user_email'])?$d['user_email']:'' ?>" name="user_email" class="form-control" id="user_email" placeholder="Email">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="first_name">Votre prénom</label>
-                            <input type="text" value="<?= !empty($d['first_name'])?$d['first_name']:'' ?>" name="first_name" class="form-control" id="first_name" placeholder="Prénom">
+                            <label class="col-sm-2 control-label" for="first_name">Prénom</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?= !empty($d['first_name'])?$d['first_name']:'' ?>" name="first_name" class="form-control" id="first_name" placeholder="Prénom">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="last_name">Votre nom</label>
-                            <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom">
+                            <label class="col-sm-2 control-label" for="last_name">Nom</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_pass">Votre mot de passe</label>
-                            <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Mot de passe">
+                            <label class="col-sm-2 control-label" for="user_pass">Mot de passe</label>
+                            <div class="col-sm-10">
+                                <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Mot de passe">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_pass2">Confirmez votre mot de passe</label>
-                            <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Mot de passe">
+                            <label class="col-sm-2 control-label" for="user_pass2">Confirmez mot de passe</label>
+                            <div class="col-sm-10">
+                                <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Mot de passe">
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-default">S'inscrire</button>
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success">S'inscrire</button>
+                          </div>
+                        </div>
                     </form>
 				</div><!-- .page-content -->
 

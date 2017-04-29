@@ -1719,7 +1719,7 @@ Preloader
 	.preloader .pre-bounce2 {
 	    -webkit-animation: 2s ease 0s normal none infinite bounce;
 	            animation: 2s ease 0s normal none infinite bounce;
-	    background-color: #de4939;
+	    background-color: #61ce70;
 	    border-radius: 50%;
 	    height: 100%;
 	    left: 0;

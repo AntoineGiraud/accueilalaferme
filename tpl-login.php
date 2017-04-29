@@ -30,21 +30,31 @@ get_header();
                 <?php endif ?>
 
 				<div class="page-content">
-                    <form class="form" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
+                    <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                         <div class="form-group">
-                            <label for="user_login">Votre identifiant</label>
-                            <input type="text" name="user_login" class="form-control" id="user_login" placeholder="Email">
+                            <label for="user_login" class="col-sm-2 control-label">Identifiant</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="user_login" class="form-control" id="user_login" placeholder="Identifiant">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="user_password">Votre mot de passe</label>
-                            <input type="password" name="user_password" class="form-control" id="user_password" placeholder="Password">
+                            <label for="user_password" class="col-sm-2 control-label">Mot de passe</label>
+                            <div class="col-sm-10">
+                                <input type="password" name="user_password" class="form-control" id="user_password" placeholder="Mot de passe">
+                            </div>
                         </div>
-                        <div class="checkbox">
-                            <label>
-                              <input type="checkbox" name="remember" value="1"> Se souvenir de moi
-                            </label>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10 checkbox">
+                                <label>
+                                  <input type="checkbox" name="remember" value="1"> Se souvenir de moi
+                                </label>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-default">Se connecter</button>
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success">Se connecter</button>
+                          </div>
+                        </div>
                     </form>
 				</div><!-- .page-content -->
 
