@@ -17,12 +17,15 @@ function site_router() {
     $url = explode('/', $url);
 
     if (count($url)==1 && $url[0] == 'login') {
+        add_filter('show_admin_bar', '__return_false');
         require 'tpl-login.php';
         die();
     } else if (count($url)==1 && $url[0] == 'profil') {
+        add_filter('show_admin_bar', '__return_false');
         require 'tpl-profil.php';
         die();
     } else if (count($url)==1 && $url[0] == 'register') {
+        add_filter('show_admin_bar', '__return_false');
         require 'tpl-register.php';
         die();
     } else if (count($url)==1 && $url[0] == 'logout') {
@@ -53,7 +56,6 @@ function add_last_nav_item($items) {
     return $items .= $out;
 }
 add_filter('wp_nav_menu_items','add_last_nav_item');
-// add_filter('show_admin_bar', '__return_false');
 
 //////////////////
 // Sydney stuff //

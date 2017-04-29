@@ -16,10 +16,10 @@ get_header();
     do_action('sydney_before_content'); ?>
 
 	<div id="primary" class="content-area fullwidth">
-		<main id="main" class="site-main" role="main">
-
-				<h1>Mes informations</h1>
-
+		<main id="main" class="site-main hentry page" role="main">
+            <header class="entry-header">
+                <h1 class="title-post entry-title">Mes informations</h1>
+            </header>
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
@@ -39,6 +39,5 @@ get_header();
                 </form>
 		</main><!-- #main -->
 	</div><!-- #primary -->
-
     <?php do_action('sydney_after_content'); ?>
 <?php get_footer(); ?>
