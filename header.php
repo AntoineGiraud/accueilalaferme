@@ -47,22 +47,6 @@
 					<div class="btn-menu"></div>
 					<nav id="mainnav" class="mainnav" role="navigation">
 						<?php wp_nav_menu( array( 'theme_location' => 'primary', 'fallback_cb' => 'sydney_menu_fallback' ) ); ?>
-                        <?php $user = wp_get_current_user(); ?>
-                        <div class="menu-principal-container">
-                            <ul class="menu">
-                                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a><span class="btn-submenu"></span>
-                                    <ul class="sub-menu" style="display: none;">
-                                        <?php if (!$user->ID): ?>
-                                            <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= bloginfo('url') ?>/login">Se connecter</a></li>
-                                            <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= bloginfo('url') ?>/register">S'inscrire</a></li>
-                                        <?php else: ?>
-                                            <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= bloginfo('url') ?>/profil">Profil <small><em><?= $user->user_login ?></em></small></a></li>
-                                            <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= bloginfo('url') ?>/logout">Se déconnecter</a></li>
-                                        <?php endif ?>
-                                    </ul>
-                                </li>
-                            </ul>
-				        </div>
                     </nav><!-- #site-navigation -->
                 </div>
 				</div>

@@ -30,9 +30,29 @@ function site_router() {
         header('Location:'.$root);
         die();
     }
-
 }
 
+function add_last_nav_item($items) {
+    $blogUrl = get_bloginfo('url');
+    $user = wp_get_current_user();
+    ob_start(); ?>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a>
+        <ul class="sub-menu" style="display: none;">
+            <?php if (!$user->ID): ?>
+                <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login">Se connecter</a></li>
+                <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register">S'inscrire</a></li>
+            <?php else: ?>
+                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil">Profil <small><em><?= $user->user_login ?></em></small></a></li>
+                <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout">Se déconnecter</a></li>
+            <?php endif ?>
+        </ul>
+    </li>
+    <?php
+    $out = ob_get_contents();
+    ob_end_clean();
+    return $items .= $out;
+}
+add_filter('wp_nav_menu_items','add_last_nav_item');
 // add_filter('show_admin_bar', '__return_false');
 
 //////////////////
