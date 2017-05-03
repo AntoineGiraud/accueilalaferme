@@ -75,7 +75,7 @@ get_header();
                         </table>
                     </div>
                     <div class="col-sm-4">
-                        <h4>Ma famille</h4>
+                        <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>

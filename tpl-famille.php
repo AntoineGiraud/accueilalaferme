@@ -76,20 +76,20 @@ get_header();
                                     <td>
                                         <select class="form-control" name="composition[0][lien]">
                                             <optgroup label="Parents">
-                                              <option>Père</option>
-                                              <option>Mère</option>
+                                              <option value="pere">Père</option>
+                                              <option value="mere">Mère</option>
                                             </optgroup>
                                             <optgroup label="Enfants">
-                                              <option>Fils</option>
-                                              <option>Fille</option>
+                                              <option value="fils">Fils</option>
+                                              <option value="fille">Fille</option>
                                             </optgroup>
                                             <optgroup label="Invités - enfant">
-                                              <option>Garçon</option>
-                                              <option>Fille</option>
+                                              <option value="friend_boy">Garçon</option>
+                                              <option value="friend_girl">Fille</option>
                                             </optgroup>
                                             <optgroup label="Autre">
-                                              <option>Homme</option>
-                                              <option>Femme</option>
+                                              <option value="homme">Homme</option>
+                                              <option value="femme">Femme</option>
                                             </optgroup>
                                         </select>
                                     </td>
