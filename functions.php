@@ -9,12 +9,13 @@
 // Fonctions Accueil à la ferme //
 //////////////////////////////////
 
+global $js_for_layout;
 require __DIR__ . '/class/Flash.php';
 add_action('send_headers', 'site_router');
 function site_router() {
     if(!isset ($_SESSION)){session_start();}
+    global $root;
     $conf = require __DIR__ . '/conf.php';
-
     $root = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
     $url = str_replace($root, '', $_SERVER['REQUEST_URI']);
     $url = explode('?', $url, 2);
@@ -33,8 +34,7 @@ function site_router() {
         $userWP = wp_get_current_user();
         if (!$userWP->ID && in_array($page, ['famille', 'profil'])) {
             \AccueilALaFerme\Flash::setFlash("Vous devez être connecté pour accéder à l'espace membre", 'danger');
-            header('Location:login');
-            die();
+            header('Location:login'); die();
         }
         // Auth pages
         if ($page == 'login') {
@@ -48,7 +48,7 @@ function site_router() {
 
 
         $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
-        // $myFamily = new \AccueilALaFerme\Family($userWP->user_email, $userWP->first_name, $userWP->last_name);
+        // $myFamilies = new \AccueilALaFerme\FamilyController($curPerson['pk']);
         if ($page == 'profil') {
             require 'tpl-profil.php';
         } else if ($page == 'famille') {
@@ -244,7 +244,8 @@ function sydney_scripts() {
 
 	wp_enqueue_style( 'sydney-font-awesome', get_template_directory_uri() . '/fonts/font-awesome.min.css' );
 
-	wp_enqueue_style( 'sydney-ie9', get_template_directory_uri() . '/css/ie9.css', array( 'sydney-style' ) );
+    wp_enqueue_style( 'sydney-ie9', get_template_directory_uri() . '/css/ie9.css', array( 'sydney-style' ) );
+	wp_enqueue_style( 'accueilalaferme-style', get_template_directory_uri() . '/css/style.css', array( 'sydney-style' ) );
 	wp_style_add_data( 'sydney-ie9', 'conditional', 'lte IE 9' );
 
     wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/css/bootstrap/js/bootstrap.min.js', array('jquery'),'', true );

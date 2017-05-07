@@ -7,6 +7,8 @@
 
 if (!empty($_POST)) {
     $d = $_POST;
+    var_dump($d );
+    die();
     if ($d['user_pass'] != $d['user_pass2'])
         $error_msg = 'Les 2 mots de passes ne correspondent pas.';
     else if (!is_email($d['user_email']))
@@ -42,7 +44,7 @@ if (!empty($_POST)) {
 get_header();
     do_action('sydney_before_content'); ?>
 
-	<div id="primary" class="content-area fullwidth">
+	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
 		<main id="main" class="site-main hentry page" role="main">
             <header class="entry-header">
                 <h1 class="title-post entry-title">Inscription</h1>
@@ -56,25 +58,25 @@ get_header();
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="user_login">Identifiant</label>
                             <div class="col-sm-10">
-                                <input type="text" value="<?= !empty($d['user_login'])?$d['user_login']:'' ?>" name="user_login" class="form-control" id="user_login" placeholder="Identifiant">
+                                <input type="text" value="<?= !empty($d['user_login'])?$d['user_login']:'' ?>" name="user_login" class="form-control" id="user_login" placeholder="Identifiant" required="required">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="user_email">Email</label>
                             <div class="col-sm-10">
-                                <input type="email" value="<?= !empty($d['user_email'])?$d['user_email']:'' ?>" name="user_email" class="form-control" id="user_email" placeholder="Email">
+                                <input type="email" value="<?= !empty($d['user_email'])?$d['user_email']:'' ?>" name="user_email" class="form-control" id="user_email" placeholder="Email" required="required">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="first_name">Prénom</label>
                             <div class="col-sm-10">
-                                <input type="text" value="<?= !empty($d['first_name'])?$d['first_name']:'' ?>" name="first_name" class="form-control" id="first_name" placeholder="Prénom">
+                                <input type="text" value="<?= !empty($d['first_name'])?$d['first_name']:'' ?>" name="first_name" class="form-control" id="first_name" placeholder="Prénom" required="required">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="last_name">Nom</label>
                             <div class="col-sm-10">
-                                <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom">
+                                <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom" required="required">
                             </div>
                         </div>
                         <div class="form-group">
@@ -86,19 +88,24 @@ get_header();
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="birthday">Anniversaire</label>
                             <div class="col-sm-10">
-                                <input type="text" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" name="birthday" class="form-control" id="birthday" placeholder="yyyy-mm-dd" maxlength="10">
+                                <p class="input-group" ng-init="bd_cal_open = false;">
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                  <input type="text" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" maxlength="10" name="birthday" id="birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                </p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="user_pass">Mot de passe</label>
                             <div class="col-sm-10">
-                                <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Mot de passe">
+                                <input type="password" name="user_pass" class="form-control" id="user_pass" placeholder="Mot de passe" required="required">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="user_pass2">Confirmez mot de passe</label>
                             <div class="col-sm-10">
-                                <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Mot de passe">
+                                <input type="password" name="user_pass2" class="form-control" id="user_pass2" placeholder="Mot de passe" required="required">
                             </div>
                         </div>
                         <div class="form-group">
@@ -112,5 +119,13 @@ get_header();
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
-    <?php do_action('sydney_after_content'); ?>
-<?php get_footer(); ?>
+    <?php
+      global $js_for_layout;
+      $js_for_layout = [
+        'angularjs',
+        'angularjs_accueilalaferme/app.js',
+        'angularjs_accueilalaferme/controllers/PageCtrl.js',
+      ];
+    do_action('sydney_after_content');
+get_footer();
+?>

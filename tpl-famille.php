@@ -42,7 +42,7 @@ $family = [
 get_header();
     do_action('sydney_before_content'); ?>
 
-	<div id="primary" class="content-area fullwidth">
+	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
 		<main id="main" class="site-main hentry page" role="main">
             <header class="entry-header">
                 <h1 class="title-post entry-title">Ma famille</h1>
@@ -135,7 +135,12 @@ get_header();
                                         <input type="text" name="composition[0][email]" class="form-control" placeholder="Email">
                                     </td>
                                     <td>
-                                        <input type="date" name="composition[0][anniversaire]" class="form-control" placeholder="Anniversaire">
+                                        <p class="input-group" ng-init="bd_cal_open = false;">
+                                          <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                          </span>
+                                          <input type="text" maxlength="10" name="composition[0][anniversaire]" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                        </p>
                                     </td>
                                     <td>
 
@@ -162,5 +167,12 @@ get_header();
                 </form>
 		</main><!-- #main -->
 	</div><!-- #primary -->
-    <?php do_action('sydney_after_content'); ?>
+    <?php
+      global $js_for_layout;
+      $js_for_layout = [
+        'angularjs',
+        'angularjs_accueilalaferme/app.js',
+        'angularjs_accueilalaferme/controllers/PageCtrl.js',
+      ];
+    do_action('sydney_after_content'); ?>
 <?php get_footer(); ?>
