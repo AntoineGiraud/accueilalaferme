@@ -7,14 +7,10 @@
 
 
 if (!empty($_POST)) {
-    $user = wp_signon($_POST);
-    if (is_wp_error($user)) {
-        $error_msg = $user->get_error_message();
-    } else
-        header('Location:profil');
-} else {
-    $user = wp_get_current_user();
-    if ($user->ID)
+    $userWP = wp_signon($_POST);
+    if (is_wp_error($userWP))
+        $error_msg = $userWP->get_error_message();
+    else
         header('Location:profil');
 }
 
@@ -24,7 +20,12 @@ get_header();
 	<div id="primary" class="content-area fullwidth">
 		<main id="main" class="site-main hentry page" role="main">
             <header class="entry-header">
-                <h1 class="title-post entry-title">Connexion</h1>
+                <h1 class="title-post entry-title">
+                    Connexion
+                    <?php if ($userWP->ID): ?>
+                        <small>Vous êtes déjà connecté : <a href="profil" class="btn btn-primary btn-xs">mon profil</a></small>
+                    <?php endif ?>
+                </h1>
             </header>
 
                 <?php if (!empty($error_msg)): ?>

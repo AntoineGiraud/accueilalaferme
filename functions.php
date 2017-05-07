@@ -9,48 +9,67 @@
 // Fonctions Accueil à la ferme //
 //////////////////////////////////
 
+require __DIR__ . '/class/Flash.php';
 add_action('send_headers', 'site_router');
-
 function site_router() {
+    if(!isset ($_SESSION)){session_start();}
+    $conf = require __DIR__ . '/conf.php';
+
     $root = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
     $url = str_replace($root, '', $_SERVER['REQUEST_URI']);
-    $url = explode('/', $url);
+    $url = explode('?', $url, 2);
+    $url_path = $url[0];
 
-    if (count($url)==1 && $url[0] == 'login') {
+    if (in_array($url_path, ['login', 'famille', 'profil', 'register', 'logout'])) {
         add_filter('show_admin_bar', '__return_false');
-        require 'tpl-login.php';
-        die();
-    } else if (count($url)==1 && $url[0] == 'famille') {
-        add_filter('show_admin_bar', '__return_false');
-        require 'tpl-famille.php';
-        die();
-    } else if (count($url)==1 && $url[0] == 'profil') {
-        add_filter('show_admin_bar', '__return_false');
-        require 'tpl-profil.php';
-        die();
-    } else if (count($url)==1 && $url[0] == 'register') {
-        add_filter('show_admin_bar', '__return_false');
-        require 'tpl-register.php';
-        die();
-    } else if (count($url)==1 && $url[0] == 'logout') {
-        wp_logout();
-        header('Location:'.$root);
+        require __DIR__ . '/class/DB.php';
+        require __DIR__ . '/class/User.php';
+        require __DIR__ . '/class/Family.php';
+
+        $confSQL = $conf['confSQL'];
+        $DB = new \AccueilALaFerme\DB($confSQL['sql_host'], $confSQL['sql_user'], $confSQL['sql_pass'], $confSQL['sql_db']);
+
+        $page = $url[0];
+        $userWP = wp_get_current_user();
+        if (!$userWP->ID && in_array($page, ['famille', 'profil'])) {
+            \AccueilALaFerme\Flash::setFlash("Vous devez être connecté pour accéder à l'espace membre", 'danger');
+            header('Location:login');
+            die();
+        }
+        // Auth pages
+        if ($page == 'login') {
+            require 'tpl-login.php'; die();
+        } else if ($page == 'register') {
+            require 'tpl-register.php'; die();
+        } else if ($page == 'logout') {
+            wp_logout();
+            header('Location:'.$root); die();
+        }
+
+
+        $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
+        // $myFamily = new \AccueilALaFerme\Family($userWP->user_email, $userWP->first_name, $userWP->last_name);
+        if ($page == 'profil') {
+            require 'tpl-profil.php';
+        } else if ($page == 'famille') {
+            require 'tpl-famille.php';
+        }
         die();
     }
 }
 
 function add_last_nav_item($items) {
     $blogUrl = get_bloginfo('url');
-    $user = wp_get_current_user();
+    $userWP = wp_get_current_user();
     ob_start(); ?>
     <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a>
         <ul class="sub-menu" style="display: none;">
-            <?php if (!$user->ID): ?>
+            <?php if (!$userWP->ID): ?>
                 <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp; Se connecter</a></li>
                 <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; S'inscrire</a></li>
             <?php else: ?>
-                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $user->user_login ?></em></small></a></li>
-                <li id="famille" class="menu-item menu-item-type-custom menu-item-object-custom famille"><a href="<?= $blogUrl ?>/famille"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Famille <small><em><?= $user->user_lastname ?></em></small></a></li>
+                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $userWP->user_login ?></em></small></a></li>
+                <li id="famille" class="menu-item menu-item-type-custom menu-item-object-custom famille"><a href="<?= $blogUrl ?>/famille"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Famille <small><em><?= $userWP->user_lastname ?></em></small></a></li>
                 <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp; Se déconnecter</a></li>
             <?php endif ?>
         </ul>

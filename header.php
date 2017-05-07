@@ -72,3 +72,4 @@
 	<div id="content" class="page-wrap">
 		<div class="container content-wrapper">
 			<div class="row">
+                <?= \AccueilALaFerme\Flash::flash(); ?>

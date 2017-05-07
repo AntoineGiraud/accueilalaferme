@@ -5,9 +5,39 @@
  * @package Sydney
  */
 
-$user = wp_get_current_user();
-if (!$user->ID)
-    header('Location:login');
+$family = [
+    'family_name' => $userWP->last_name,
+    'adresse' => [
+        'pk' => null,
+        'street' => '547 avenue de la République',
+        'postal_code' => '59700',
+        'city' => 'Marcq-en-Baroeul',
+        'region' => 'Nord',
+        'country' => 'France'
+    ],
+    'members' => [
+        [
+            'id' => null,
+            'firstname' => 'Antoine',
+            'lastname' => 'Giraud',
+            'birthday' => '1992-10-08',
+            'email' => 'antoine.giraud@outlook.com',
+            'is_member' => 1,
+            'can_manage' => 1,
+            'link' => 'fils'
+        ],
+        [
+            'id' => null,
+            'firstname' => 'Corentin',
+            'lastname' => 'Giraud',
+            'birthday' => '1997-07-29',
+            'email' => 'antoine.giraud@outlook.com',
+            'is_member' => 1,
+            'can_manage' => 1,
+            'link' => 'fils'
+        ]
+    ]
+];
 
 get_header();
     do_action('sydney_before_content'); ?>
@@ -29,25 +59,25 @@ get_header();
                     <fieldset>
                         <legend>Description générale de la famille</legend>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="familly_name">Nom famille</label>
+                            <label class="col-sm-2 control-label" for="family_name">Nom famille</label>
                             <div class="col-sm-10">
-                                <input type="text" name="familly_name" class="form-control" id="familly_name" placeholder="Age" value="<?= $user->last_name ?>">
+                                <input type="text" name="family_name" class="form-control" id="family_name" placeholder="Age" value="<?= $userWP->last_name ?>">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="adresse_familly_name">Adresse</label>
+                            <label class="col-sm-2 control-label" for="adresse_family_name">Adresse</label>
                             <div class="col-sm-10">
                               <div class="row">
                                 <div class="col-sm-8">
-                                    <input type="text" name="adresse[familly_name]" class="form-control" id="adresse_familly_name" placeholder="Adresse" value="">
+                                    <input type="text" name="adresse[street]" class="form-control" id="adresse_family_name" placeholder="Adresse" value="">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="adresse[ville]" class="form-control" id="adresse_ville" placeholder="Ville" value="">
+                                    <input type="text" name="adresse[city]" class="form-control" id="adresse_city" placeholder="Ville" value="">
                                 </div>
                               </div><br>
                               <div class="row">
                                 <div class="col-sm-4">
-                                    <input type="text" name="adresse[code_postal]" class="form-control" id="adresse_code_postal" placeholder="Code postal" value="">
+                                    <input type="text" name="adresse[postal_code]" class="form-control" id="adresse_postal_code" placeholder="Code postal" value="">
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="text" name="adresse[region]" class="form-control" id="adresse_region" placeholder="Région" value="">
@@ -67,7 +97,9 @@ get_header();
                                     <th>Lien</th>
                                     <th>Prénom</th>
                                     <th>Nom</th>
+                                    <th>Email</th>
                                     <th>Anniversaire</th>
+                                    <th>Droits gestion</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
@@ -100,48 +132,23 @@ get_header();
                                         <input type="text" name="composition[0][nom]" class="form-control" placeholder="Nom">
                                     </td>
                                     <td>
+                                        <input type="text" name="composition[0][email]" class="form-control" placeholder="Email">
+                                    </td>
+                                    <td>
                                         <input type="date" name="composition[0][anniversaire]" class="form-control" placeholder="Anniversaire">
+                                    </td>
+                                    <td>
+
+                                        <label>
+                                            <input type="checkbox" value="1" name="composition[0][can_edit]">
+                                        </label>
                                     </td>
                                     <td>
                                         <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        <select class="form-control" name="composition[0][lien]">
-                                            <optgroup label="Parents">
-                                              <option>Père</option>
-                                              <option>Mère</option>
-                                            </optgroup>
-                                            <optgroup label="Enfants">
-                                              <option>Fils</option>
-                                              <option>Fille</option>
-                                            </optgroup>
-                                            <optgroup label="Invités - enfant">
-                                              <option>Garçon</option>
-                                              <option>Fille</option>
-                                            </optgroup>
-                                            <optgroup label="Autre">
-                                              <option>Homme</option>
-                                              <option>Femme</option>
-                                            </optgroup>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="composition[0][prenom]" class="form-control" placeholder="Prénom">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="composition[0][nom]" class="form-control" placeholder="Nom">
-                                    </td>
-                                    <td>
-                                        <input type="date" name="composition[0][anniversaire]" class="form-control" placeholder="Anniversaire">
-                                    </td>
-                                    <td>
-                                        <a href="#" title="retirer"><span class="glyphicon glyphicon-remove"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5"><a href="#" title="Ajout d'une personne"><span class="glyphicon glyphicon-plus"></span></a></td>
+                                    <td colspan="7"><a href="#" title="Ajout d'une personne"><span class="glyphicon glyphicon-plus"></span></a></td>
                                 </tr>
                             </tbody>
                         </table>

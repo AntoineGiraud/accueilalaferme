@@ -25,6 +25,7 @@ if (!empty($_POST)) {
         if (is_wp_error($user)) {
             $error_msg = $user->get_error_message();
         } else {
+            $curPerson = new \AccueilALaFerme\User($DB, null, $d['user_email'], $d['first_name'], $d['last_name'], $d['birthday'], $d['phone']);
             // add_user_meta($user, 'cp', 'code postal ?'); // champ perso - get_user_meta()
             $msg = 'Vous êtes désormais inscrit au site Accueil à la ferme :)';
             $headers = 'From:'.get_option('admin_email')."\r\n";
@@ -74,6 +75,18 @@ get_header();
                             <label class="col-sm-2 control-label" for="last_name">Nom</label>
                             <div class="col-sm-10">
                                 <input type="text" value="<?= !empty($d['last_name'])?$d['last_name']:'' ?>" name="last_name" class="form-control" id="last_name" placeholder="Nom">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="phone">Téléphone</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?= !empty($d['phone'])?$d['phone']:'' ?>" name="phone" class="form-control" id="phone" placeholder="Téléphone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="birthday">Anniversaire</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" name="birthday" class="form-control" id="birthday" placeholder="yyyy-mm-dd" maxlength="10">
                             </div>
                         </div>
                         <div class="form-group">

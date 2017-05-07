@@ -12,10 +12,6 @@ function getAge($anniversaire) {
     return $interval->y;
 }
 
-$user = wp_get_current_user();
-if (!$user->ID)
-    header('Location:login');
-
 if (!empty($_POST['user_age']))
     update_user_meta(get_current_user_id(), 'user_age', $_POST['user_age']*1);
 
@@ -32,7 +28,7 @@ get_header();
                 <?php endif ?>
 
 				<div class="page-content">
-                    <h4>Bienvenue <?= $user->user_firstname ?> !</h4>
+                    <h4>Bienvenue <?= $userWP->user_firstname ?> !</h4>
                     <p>Vous retrouverez ici votre profil vous permettant de gérer votre famille/compte et de vous inscrire aux évènements de la ferme.</p>
 				</div><!-- .page-content -->
 
