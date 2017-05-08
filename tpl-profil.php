@@ -84,33 +84,21 @@ get_header();
                             <tbody>
                                 <tr>
                                     <td>Père</td>
-                                    <td>François</td>
+                                    <td>Papa</td>
                                     <td>Giraud</td>
-                                    <td>1964-05-08 <em>(<?= getAge('1964-05-08') ?> ans)</em></td>
+                                    <td>1970-12-01 <em>(<?= getAge('1970-12-01') ?> ans)</em></td>
                                 </tr>
                                 <tr>
                                     <td>Mère</td>
-                                    <td>Gabrièle</td>
+                                    <td>Maman</td>
                                     <td>Amossé</td>
-                                    <td>1964-12-21 <em>(<?= getAge('1964-12-21') ?> ans)</em></td>
+                                    <td>1970-01-21 <em>(<?= getAge('1970-01-21') ?> ans)</em></td>
                                 </tr>
                                 <tr>
                                     <td>Fils</td>
                                     <td>Antoine</td>
                                     <td>Giraud</td>
-                                    <td>1992-10-08 <em>(<?= getAge('1992-10-08') ?> ans)</em></td>
-                                </tr>
-                                <tr>
-                                    <td>Fils</td>
-                                    <td>Corentin</td>
-                                    <td>Giraud</td>
-                                    <td>1994-07-29 <em>(<?= getAge('1994-07-29') ?> ans)</em></td>
-                                </tr>
-                                <tr>
-                                    <td>Fils</td>
-                                    <td>Grégoire</td>
-                                    <td>Giraud</td>
-                                    <td>1997-11-05 <em>(<?= getAge('1997-11-05') ?> ans)</em></td>
+                                    <td>2000-01-08 <em>(<?= getAge('2002-01-08') ?> ans)</em></td>
                                 </tr>
                             </tbody>
                         </table>

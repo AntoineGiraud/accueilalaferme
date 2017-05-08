@@ -12,8 +12,8 @@ $group = [
     'address' => [
         'pk' => null,
         'street' => '2800 avenue Willowdale',
-        'postal_code' => '59700',
-        'city' => 'Marcq-en-Baroeul',
+        'postal_code' => '17147',
+        'city' => 'Lille',
         'region' => 'Nord',
         'country' => 'France'
     ],
@@ -24,15 +24,15 @@ $group = [
             'lastname' => 'Giraud',
             'email' => 'antoine@outlook.com',
             'phone' => '+514',
-            'birthday' => '1992-10-08',
+            'birthday' => '2002-01-08',
             'can_manage' => 1,
             'link' => 'fils'
         ],
         [
             'pk' => null,
-            'firstname' => 'Corentin',
+            'firstname' => 'Frangin',
             'lastname' => 'Giraud',
-            'email' => 'corentin@outlook.com',
+            'email' => 'frangin@outlook.com',
             'phone' => '07...',
             'birthday' => '',
             'can_manage' => 1,
