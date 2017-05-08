@@ -48,6 +48,10 @@ function site_router() {
 
 
         $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
+        if (empty($curPerson->data['is_allowed'])) {
+            \AccueilALaFerme\Flash::setFlash("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning');
+            header('Location:login'); die();
+        }
         // $myFamilies = new \AccueilALaFerme\FamilyController($curPerson['pk']);
         if ($page == 'profil') {
             require 'tpl-profil.php';

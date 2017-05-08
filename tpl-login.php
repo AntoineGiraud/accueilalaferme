@@ -22,7 +22,7 @@ get_header();
             <header class="entry-header">
                 <h1 class="title-post entry-title">
                     Connexion
-                    <?php if ($userWP->ID): ?>
+                    <?php if ($userWP->ID && !empty($curPerson->data['is_allowed'])): ?>
                         <small>Vous êtes déjà connecté : <a href="profil" class="btn btn-primary btn-xs">mon profil</a></small>
                     <?php endif ?>
                 </h1>
