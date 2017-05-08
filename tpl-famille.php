@@ -89,21 +89,21 @@ get_header();
                             <div class="col-sm-10">
                               <div class="row">
                                 <div class="col-sm-8">
-                                    <input type="text" name="address[street]" class="form-control" placeholder="Adresse" ng-model="group.address.street">
+                                    <input type="text" name="address[street]" title="address : street" class="form-control" placeholder="Adresse" ng-model="group.address.street">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="address[city]" class="form-control" placeholder="Ville" ng-model="group.address.city">
+                                    <input type="text" name="address[city]" title="address : city" class="form-control" placeholder="Ville" ng-model="group.address.city">
                                 </div>
                               </div><br>
                               <div class="row">
                                 <div class="col-sm-4">
-                                    <input type="text" name="address[postal_code]" class="form-control" placeholder="Code postal" ng-model="group.address.postal_code">
+                                    <input type="text" name="address[postal_code]" title="address : postal_code" class="form-control" placeholder="Code postal" ng-model="group.address.postal_code">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="address[region]" class="form-control" placeholder="Région" ng-model="group.address.region">
+                                    <input type="text" name="address[region]" title="address : region" class="form-control" placeholder="Région" ng-model="group.address.region">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="address[country]" class="form-control" placeholder="Pays" ng-model="group.address.country">
+                                    <input type="text" name="address[country]" title="address : country" class="form-control" placeholder="Pays" ng-model="group.address.country">
                                 </div>
                               </div>
                             </div>
