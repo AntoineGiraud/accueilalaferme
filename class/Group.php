@@ -43,4 +43,21 @@ class Group {
 
         }
     }
+
+    public static function getBasicFields($curUser=null) {
+        if (!empty($curUser)) {
+            $d = $curPerson->data;
+        else
+            $d = [ 'pk' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'phone' => '', 'birthday' => '' ];
+        return [
+            'prop' => [
+                'is_family' => '1', 'name' => $d['lastname'], 'phone' => '',
+                'address' => ['pk' => null, 'street' => '', 'postal_code' => '', 'city' => '', 'region' => '', 'country' => '']
+            ],
+            'persons' => [ [
+                'pk' => $d['pk'], 'can_manage' => true, 'link' => 'pere'
+                'firstname' => $d['firstname'], 'lastname' => $d['lastname'], 'email' => $d['email'], 'phone' => $d['phone'], 'birthday' => $d['birthday'],
+            ] ]
+        ];
+    }
 }

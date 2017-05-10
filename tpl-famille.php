@@ -13,34 +13,12 @@ if (!empty($_GET['group_id'])) {
             'prop' => $curGroup->prop,
             'persons' => $curGroup->persons
         ];
-    } else if (isset($curPerson->groups[$group_id])) {
-        \AccueilALaFerme\Flash::setFlash("Vous n'avez pas les droits d'édition de vos groupes.", 'warning');
-        header('Location:profil'); die();
-    } else {
-        \AccueilALaFerme\Flash::setFlash("Pas de groupe trouvé avec l'id #".$group_id, 'warning');
-        header('Location:profil'); die();
-    }
+    } else if (isset($curPerson->groups[$group_id]))
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits d'édition de vos groupes.", 'warning', 'profil');
+    else
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de groupe trouvé avec l'id #".$group_id, 'warning', 'profil');
 } else {
-    $group = [
-        'prop' => [
-            'is_family' => '1',
-            'name' => $userWP->last_name,
-            'phone' => '',
-            'address' => ['pk' => null, 'street' => '', 'postal_code' => '', 'city' => '', 'region' => '', 'country' => '']
-        ],
-        'persons' => [
-            [
-                'pk' => $curPerson->data['pk'],
-                'firstname' => $curPerson->data['firstname'],
-                'lastname' => $curPerson->data['lastname'],
-                'email' => $curPerson->data['email'],
-                'phone' => $curPerson->data['phone'],
-                'birthday' => $curPerson->data['birthday'],
-                'can_manage' => true,
-                'link' => 'pere'
-            ]
-        ]
-    ];
+    $group = \AccueilALaFerme\Groupg::getBasicFields($curPerson);
 }
 
 if (!empty($_POST)) {

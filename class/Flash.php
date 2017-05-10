@@ -16,6 +16,10 @@ class Flash {
             'type' => $type
         ];
     }
+    static function setFlashAndRedirect($message, $type='success', $url='profil') {
+        self::setFlash($message, $type);
+        header('Location:'.$url);die();
+    }
 
     /**
      *

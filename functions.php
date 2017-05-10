@@ -32,10 +32,8 @@ function site_router() {
 
         $page = $url[0];
         $userWP = wp_get_current_user();
-        if (!$userWP->ID && in_array($page, ['famille', 'profil'])) {
-            \AccueilALaFerme\Flash::setFlash("Vous devez être connecté pour accéder à l'espace membre", 'danger');
-            header('Location:login'); die();
-        }
+        if (!$userWP->ID && in_array($page, ['famille', 'profil']))
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Vous devez être connecté pour accéder à l'espace membre.", 'danger', 'login');
         // Auth pages
         if ($page == 'login') {
             require 'tpl-login.php'; die();
@@ -48,10 +46,8 @@ function site_router() {
 
 
         $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
-        if (empty($curPerson->data['is_allowed'])) {
-            \AccueilALaFerme\Flash::setFlash("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning');
-            header('Location:login'); die();
-        }
+        if (empty($curPerson->data['is_allowed']))
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning', 'login');
         if ($page == 'profil') {
             require 'tpl-profil.php';
         } else if ($page == 'famille') {

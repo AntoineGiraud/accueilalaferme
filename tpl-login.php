@@ -11,7 +11,7 @@ if (!empty($_POST)) {
     if (is_wp_error($userWP))
         $error_msg = $userWP->get_error_message();
     else
-        header('Location:profil');
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Authentification réussie.", 'success', 'profil');
 }
 
 get_header();
