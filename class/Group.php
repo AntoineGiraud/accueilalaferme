@@ -44,8 +44,8 @@ class Group {
         }
     }
 
-    public static function getBasicFields($curUser=null) {
-        if (!empty($curUser)) {
+    public static function getBasicFields($curPerson=null) {
+        if (!empty($curPerson))
             $d = $curPerson->data;
         else
             $d = [ 'pk' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'phone' => '', 'birthday' => '' ];
@@ -55,8 +55,8 @@ class Group {
                 'address' => ['pk' => null, 'street' => '', 'postal_code' => '', 'city' => '', 'region' => '', 'country' => '']
             ],
             'persons' => [ [
-                'pk' => $d['pk'], 'can_manage' => true, 'link' => 'pere'
-                'firstname' => $d['firstname'], 'lastname' => $d['lastname'], 'email' => $d['email'], 'phone' => $d['phone'], 'birthday' => $d['birthday'],
+                'pk' => $d['pk'], 'can_manage' => true, 'link' => 'pere',
+                'firstname' => $d['firstname'], 'lastname' => $d['lastname'], 'email' => $d['email'], 'phone' => $d['phone'], 'birthday' => $d['birthday']
             ] ]
         ];
     }

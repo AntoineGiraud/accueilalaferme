@@ -18,7 +18,7 @@ if (!empty($_GET['group_id'])) {
     else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de groupe trouvé avec l'id #".$group_id, 'warning', 'profil');
 } else {
-    $group = \AccueilALaFerme\Groupg::getBasicFields($curPerson);
+    $group = \AccueilALaFerme\Group::getBasicFields($curPerson);
 }
 
 if (!empty($_POST)) {
