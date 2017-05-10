@@ -9,6 +9,7 @@ class User {
     public $data;
 
     function __construct($DB, $pk, $email, $firstname=null, $lastname=null, $birthday=null, $phone=null, $address=[], $comment=null) {
+        $this->DB = $DB;
         if (empty($pk) && empty($email))
             throw new \Exception("No person email or id provided", 1);
         else if (!empty($pk)) {
@@ -40,6 +41,21 @@ class User {
             if ($phone !== null && $this->data['phone'] != $phone) $update['phone'] = $phone;
             if (!empty($update))
                 $DB->query("UPDATE person SET ".implode(', ', array_map(function($d){return $d.'=:'.$d;}, array_keys($update)))." WHERE pk = ".$this->data['pk'], $update);
+        }
+        $this->loadGroups();
+    }
+
+    public function loadGroups() {
+        $res = $this->DB->query("SELECT g.*, phg.can_manage, phg.group_link_pk, phg.event_pk
+                    FROM `group` g
+                        LEFT JOIN person_has_group phg ON phg.group_id = g.pk
+                    WHERE phg.person_id = :person_id AND phg.was_removed = 0 AND g.was_canceled = 0",
+                    ['person_id'=>$this->data['pk']]);
+        $this->canManageGroupIds = [];
+        $this->groups = [];
+        foreach ($res as $row) {
+            $this->canManageGroupIds = $row['pk'];
+            $this->groups[$row['pk']] = $row;
         }
     }
 

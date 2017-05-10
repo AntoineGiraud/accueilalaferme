@@ -25,7 +25,7 @@ function site_router() {
         add_filter('show_admin_bar', '__return_false');
         require __DIR__ . '/class/DB.php';
         require __DIR__ . '/class/User.php';
-        require __DIR__ . '/class/Family.php';
+        require __DIR__ . '/class/Group.php';
 
         $confSQL = $conf['confSQL'];
         $DB = new \AccueilALaFerme\DB($confSQL['sql_host'], $confSQL['sql_user'], $confSQL['sql_pass'], $confSQL['sql_db']);
@@ -52,7 +52,6 @@ function site_router() {
             \AccueilALaFerme\Flash::setFlash("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning');
             header('Location:login'); die();
         }
-        // $myFamilies = new \AccueilALaFerme\FamilyController($curPerson['pk']);
         if ($page == 'profil') {
             require 'tpl-profil.php';
         } else if ($page == 'famille') {

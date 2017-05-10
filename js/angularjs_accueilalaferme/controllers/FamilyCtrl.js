@@ -1,7 +1,7 @@
 app.controller('FamilyCtrl', function($scope, $timeout, $window, $rootScope, $interval){
 
     for (k in groupData.persons) {
-        bd = groupData.persons[k].birthday.split('-');
+        bd = groupData.persons[k].birthday != null ? groupData.persons[k].birthday.split('-') : '';
         groupData.persons[k].birthday = bd[2] ? new Date(bd[0], bd[1]-1, bd[2]):null;
     }
     $scope.group = groupData;
