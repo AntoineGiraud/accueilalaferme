@@ -4,25 +4,28 @@
  *
  * @package Sydney
  */
-
-if (!empty($_GET['group_id'])) {
-    $group_id = $_GET['group_id']*1;
-    if (in_array($group_id, $curPerson->canManageGroupIds)) {
-        $curGroup = \AccueilALaFerme\Group($_GET['group_id'], $DB);
-        $group = [
-            'prop' => $curGroup->prop,
-            'persons' => $curGroup->persons
-        ];
-    } else if (isset($curPerson->groups[$group_id]))
+global $curPerson;
+if (!empty($_GET['group_id']) || !empty($_POST['group_id'])) {
+    $group_id = !empty($_GET['group_id']) ? $_GET['group_id']*1 : $_POST['group_id']*1;
+    if (in_array($group_id, $curPerson->canManageGroupIds))
+        $curGroup = new \AccueilALaFerme\Group($_GET['group_id'], $DB);
+    else if (isset($curPerson->groups[$group_id]))
         \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits d'édition de vos groupes.", 'warning', 'profil');
     else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de groupe trouvé avec l'id #".$group_id, 'warning', 'profil');
-} else {
-    $group = \AccueilALaFerme\Group::getBasicFields($curPerson);
-}
+} else
+    $curGroup = new \AccueilALaFerme\Group(null, $DB, $curPerson);
 
 if (!empty($_POST)) {
-
+    try {
+        $curGroup->saveFamily($_POST);
+    } catch (Exception $e) {
+        $error_msg = $e->getMessage();
+        $e = $curGroup->errors['other'];
+        if (!empty($e['persons_errors']))
+            $e['persons_errors'] = 'Erreurs champs personnes : '.implode(', ', array_keys($e['persons_errors']));
+        $error_msg .= '<br>'.implode('<br>', $e);
+    }
 }
 
 get_header();
@@ -44,6 +47,7 @@ get_header();
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
                         <legend>Description générale {{{'1':'de la famille', '0':'du groupe'}[group.prop.is_family]}} <em>{{group.prop.name}}</em></legend>
+                        <input type="hidden" name="pk" value="{{group.prop.pk}}">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Statut</label>
                             <div class="col-sm-10">
@@ -69,7 +73,7 @@ get_header();
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Adresse</label>
-                            <input type="hidden" name="address[pk]" ng-model="group.prop.address.pk">
+                            <input type="hidden" name="address[pk]" value="{{group.prop.address.pk}}">
                             <div class="col-sm-10">
                               <div class="row">
                                 <div class="col-sm-8">
@@ -129,11 +133,11 @@ get_header();
                                             </optgroup>
                                         </select>
                                     </td>
-                                    <td>
-                                        <input type="text" name="persons[{{$index}}][prenom]" ng-model="member.firstname" class="form-control" placeholder="Prénom">
+                                    <td ng-class="{'has-error':member.errors.firstname}">
+                                        <input type="text" name="persons[{{$index}}][firstname]" ng-model="member.firstname" class="form-control" placeholder="Prénom" required="required">
                                     </td>
-                                    <td>
-                                        <input type="text" name="persons[{{$index}}][nom]" ng-model="member.lastname" class="form-control" placeholder="Nom">
+                                    <td ng-class="{'has-error':member.errors.lastname}">
+                                        <input type="text" name="persons[{{$index}}][lastname]" ng-model="member.lastname" class="form-control" placeholder="Nom" required="required">
                                     </td>
                                     <td>
                                         <input type="email" name="persons[{{$index}}][email]" ng-model="member.email" class="form-control" placeholder="Email">
@@ -141,12 +145,12 @@ get_header();
                                     <td>
                                         <input type="text" name="persons[{{$index}}][phone]" ng-model="member.phone" class="form-control" placeholder="Téléphone">
                                     </td>
-                                    <td>
+                                    <td ng-class="{'has-error':member.errors.birthday}">
                                         <p class="input-group" ng-init="bd_cal_open = false;">
                                           <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                           </span>
-                                          <input type="text" maxlength="10" name="persons[{{$index}}][anniversaire]" ng-model="member.birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                          <input type="text" maxlength="10" name="persons[{{$index}}][birthday]" ng-model="member.birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
                                         </p>
                                     </td>
                                     <td>
@@ -182,7 +186,10 @@ if ($_POST) {
         'angularjs',
         'angularjs_accueilalaferme/app.js',
         'angularjs_accueilalaferme/controllers/PageCtrl.js',
-        'var groupData = '.json_encode($group).';',
+        'var groupData = '.json_encode([
+            'prop' => $curGroup->prop,
+            'persons' => $curGroup->persons
+        ]).';',
         'angularjs_accueilalaferme/controllers/FamilyCtrl.js'
       ];
     do_action('sydney_after_content'); ?>
