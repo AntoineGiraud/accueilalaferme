@@ -46,18 +46,51 @@ class User {
     }
 
     public function loadGroups() {
-        $res = $this->DB->query("SELECT g.*, phg.can_manage, phg.group_link_pk, phg.event_pk
-                    FROM `group` g
-                        LEFT JOIN person_has_group phg ON phg.group_id = g.pk
-                    WHERE phg.person_id = :person_id AND phg.was_removed = 0 AND g.was_canceled = 0",
+        $res = $this->DB->query("SELECT g.*, phg.can_manage, phg.group_link_pk, phg.event_pk, phg.was_removed
+                    FROM person_has_group phg
+                        LEFT JOIN `group` g ON phg.group_id = g.pk
+                    WHERE phg.person_id = :person_id AND (phg.was_removed is null OR phg.was_removed = 0) AND (g.was_canceled is null OR g.was_canceled = 0)",
                     ['person_id'=>$this->data['pk']]);
         $this->canManageGroupIds = [];
         $this->groups = [];
         foreach ($res as $row) {
-            $this->canManageGroupIds = $row['pk'];
+            if ($row['can_manage'])
+                $this->canManageGroupIds[] = $row['pk'];
             $this->groups[$row['pk']] = $row;
         }
     }
+
+    public static function save($DB, $new, $old=null) {
+        foreach (['email', 'firstname', 'lastname', 'birthday', 'phone'] as $key)
+            $new[$key] = empty($new[$key]) ? null : trim($new[$key]);
+        if (empty('firstname') && empty('lastname'))
+            return self::nullUser();
+        if (empty($new['pk'])) { // Insert address
+            $new['pk'] = $DB->query(
+                    "INSERT INTO `person` (`email`, `firstname`, `lastname`, `birthday`, `phone`)
+                    VALUES (:email, :firstname, :lastname, :birthday, :phone)", [
+                        'email' => $new['email'],
+                        'firstname' => $new['firstname'],
+                        'lastname' => $new['lastname'],
+                        'birthday' => empty($new['birthday']) ? null : $new['birthday'],
+                        'phone' => $new['phone']
+                    ]);
+        } else { // update address
+            $update = [];
+            if ($new['email'] !== $old['email']) $update['email'] = 'email = "'.$new['email'].'"';
+            if ($new['firstname'] !== $old['firstname']) $update['firstname'] = 'firstname = "'.$new['firstname'].'"';
+            if ($new['lastname'] !== $old['lastname']) $update['lastname'] = 'lastname = "'.$new['lastname'].'"';
+            if ($new['birthday'] !== $old['birthday']) $update['birthday'] = 'birthday = "'.$new['birthday'].'"';
+            if ($new['phone'] !== $old['phone']) $update['phone'] = 'phone = "'.$new['phone'].'"';
+            if (!empty($update))
+                $DB->query("UPDATE person SET ".implode(', ', $update)." WHERE pk = ".$new['pk']);
+        }
+        return $new;
+    }
+    public static function nullUser() {
+        return [ 'pk' => null, 'firstname' => '', 'lastname' => '', 'email' => '', 'phone' => '', 'birthday' => '' ];
+    }
+
 
     public static function getUserId($DB, $email) {
         $res = $DB->queryFirst('SELECT id FROM person WHERE email = :email', ['email'=>$email]);

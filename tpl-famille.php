@@ -5,20 +5,29 @@
  * @package Sydney
  */
 global $curPerson;
-if (!empty($_GET['group_id']) || !empty($_POST['group_id'])) {
-    $group_id = !empty($_GET['group_id']) ? $_GET['group_id']*1 : $_POST['group_id']*1;
+
+if (!empty($_GET['group_id']))
+    $group_id = $_GET['group_id']*1;
+else if (!empty($_POST['group_id']))
+    $group_id = $_POST['group_id']*1;
+else if (!empty($curPerson->groups))
+    $group_id = current(array_keys($curPerson->groups));
+else
+    $group_id = null;
+if ($group_id) {
     if (in_array($group_id, $curPerson->canManageGroupIds))
-        $curGroup = new \AccueilALaFerme\Group($_GET['group_id'], $DB);
+        $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
     else if (isset($curPerson->groups[$group_id]))
-        \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits d'édition de vos groupes.", 'warning', 'profil');
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits d'édition de votre groupe.", 'warning', 'profil');
     else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de groupe trouvé avec l'id #".$group_id, 'warning', 'profil');
 } else
-    $curGroup = new \AccueilALaFerme\Group(null, $DB, $curPerson);
+    $curGroup = new \AccueilALaFerme\Group($group_id, $DB, $curPerson);
+
 
 if (!empty($_POST)) {
     try {
-        $curGroup->saveFamily($_POST);
+        $curGroup->saveGroup($_POST);
     } catch (Exception $e) {
         $error_msg = $e->getMessage();
         $e = $curGroup->errors['other'];
@@ -26,7 +35,31 @@ if (!empty($_POST)) {
             $e['persons_errors'] = 'Erreurs champs personnes : '.implode(', ', array_keys($e['persons_errors']));
         $error_msg .= '<br>'.implode('<br>', $e);
     }
+    // Porter vers wordpress les MAJ dans les personnes
+    if (isset($curGroup->persons[$curPerson->data['pk']])) {
+        $majCurUser = $curGroup->persons[$curPerson->data['pk']];
+        $update = [];
+        $userWP = wp_get_current_user();
+        if ($userWP->user_email != $majCurUser['email'])
+            $update['user_email'] = $majCurUser['email'];
+        if ($userWP->first_name != $majCurUser['firstname'])
+            $update['first_name'] = $majCurUser['firstname'];
+        if ($userWP->last_name != $majCurUser['lastname'])
+            $update['last_name'] = $majCurUser['lastname'];
+        if (!empty($update)) {
+            $update['ID'] = $userWP->ID;
+            $res = wp_update_user( $update );
+            if ( is_wp_error( $res ) ) { // rollback
+                $error_msg = $res->get_error_message();
+                $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
+            } else {
+                $userWP = wp_get_current_user();
+                header('Location:'.$root.'/famille');die();
+            }
+        }
+    }
 }
+
 
 get_header();
     do_action('sydney_before_content'); ?>
@@ -60,9 +93,9 @@ get_header();
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="family_name">Nom</label>
+                            <label class="col-sm-2 control-label" for="name">Nom</label>
                             <div class="col-sm-10">
-                                <input type="text" name="family_name" class="form-control" id="family_name" placeholder="Age" ng-model="group.prop.name">
+                                <input type="text" name="name" class="form-control" id="name" placeholder="Age" ng-model="group.prop.name">
                             </div>
                         </div>
                         <div class="form-group">
@@ -154,6 +187,7 @@ get_header();
                                         </p>
                                     </td>
                                     <td>
+                                        <input type="hidden" name="persons[{{$index}}][can_manage]" value="{{member.can_manage}}" ng-show="member.pk==<?= $curPerson->data['pk'] ?>">
                                         <label ng-hide="member.pk==<?= $curPerson->data['pk'] ?>">
                                             <input type="checkbox" value="1" ng-model="member.can_manage" name="persons[{{$index}}][can_manage]">
                                         </label>
@@ -178,9 +212,6 @@ get_header();
 		</main><!-- #main -->
 	</div><!-- #primary -->
     <?php
-if ($_POST) {
-    var_dump($_POST);
-}
       global $js_for_layout;
       $js_for_layout = [
         'angularjs',
@@ -188,7 +219,7 @@ if ($_POST) {
         'angularjs_accueilalaferme/controllers/PageCtrl.js',
         'var groupData = '.json_encode([
             'prop' => $curGroup->prop,
-            'persons' => $curGroup->persons
+            'persons' => array_values($curGroup->persons)
         ]).';',
         'angularjs_accueilalaferme/controllers/FamilyCtrl.js'
       ];
