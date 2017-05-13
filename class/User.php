@@ -48,7 +48,7 @@ class User {
     public function loadGroups() {
         $res = $this->DB->query("SELECT g.*, phg.can_manage, phg.group_link_pk, phg.event_pk, phg.was_removed
                     FROM person_has_group phg
-                        LEFT JOIN `group` g ON phg.group_id = g.pk
+                        LEFT JOIN `groupe` g ON phg.group_id = g.pk
                     WHERE phg.person_id = :person_id AND (phg.was_removed is null OR phg.was_removed = 0) AND (g.was_canceled is null OR g.was_canceled = 0)",
                     ['person_id'=>$this->data['pk']]);
         $this->canManageGroupIds = [];

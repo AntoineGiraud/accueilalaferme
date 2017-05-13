@@ -35,7 +35,7 @@ class Group {
                                                 a.pk addr_pk, a.street addr_street, a.postal_code addr_postal_code,
                                                     a.city addr_city, a.region addr_region, a.country addr_country,
                                                 e.name event_name, e.slug event_slug
-                                            FROM `group` g
+                                            FROM `groupe` g
                                                 LEFT JOIN address a ON a.pk = g.address_pk
                                                 LEFT JOIN event e ON e.pk = g.event_pk
                                             WHERE g.pk = :pk", ['pk' => $pk]);
@@ -77,7 +77,7 @@ class Group {
             // Save group
             if (empty($this->prop['pk'])) { // Insert Group
                 $this->prop['pk'] = $this->DB->query(
-                            "INSERT INTO `group` (`name`, `address_pk`, `phone`, `is_family`, `event_pk`)
+                            "INSERT INTO `groupe` (`name`, `address_pk`, `phone`, `is_family`, `event_pk`)
                             VALUES (:name, :address_pk, :phone, :is_family, :event_pk)", [
                                 'name' => $post['name'],
                                 'address_pk' => $this->prop['address']['pk'],
@@ -96,7 +96,7 @@ class Group {
                 if ($post['address']['pk'] !== $this->prop['address']['pk'])
                     $update['address_pk'] = 'address_pk = '.(empty($this->prop['address']['pk'])?'null':$this->prop['address']['pk']).'';
                 if (!empty($update))
-                    $this->DB->query("UPDATE `group` SET ".implode(', ', $update)." WHERE pk = ".$this->prop['pk']);
+                    $this->DB->query("UPDATE `groupe` SET ".implode(', ', $update)." WHERE pk = ".$this->prop['pk']);
             }
             $this->prop['name'] = trim($post['name']);
             $this->prop['phone'] = trim($post['phone']);
