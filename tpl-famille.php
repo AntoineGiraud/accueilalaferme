@@ -54,7 +54,7 @@ if (!empty($_POST)) {
                 $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
             } else {
                 $userWP = wp_get_current_user();
-                header('Location:'.$root.'/famille');die();
+                header('Location:'.$root.'famille');die();
             }
         }
     }
