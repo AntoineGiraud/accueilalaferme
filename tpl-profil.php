@@ -12,8 +12,10 @@ function getAge($anniversaire) {
     return $interval->y;
 }
 
-if (!empty($_POST['user_age']))
-    update_user_meta(get_current_user_id(), 'user_age', $_POST['user_age']*1);
+if (!empty($curPerson->groups)) {
+    $group_id = current(array_keys($curPerson->groups));
+    $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
+} else $curGroup = null;
 
 get_header();
     do_action('sydney_before_content'); ?>
@@ -70,38 +72,38 @@ get_header();
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-sm-4">
-                        <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
-                        <table class="table table-bordered table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Lien</th>
-                                    <th>Prénom</th>
-                                    <th>Nom</th>
-                                    <th>Anniversaire</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Père</td>
-                                    <td>Papa</td>
-                                    <td>Giraud</td>
-                                    <td>1970-12-01 <em>(<?= getAge('1970-12-01') ?> ans)</em></td>
-                                </tr>
-                                <tr>
-                                    <td>Mère</td>
-                                    <td>Maman</td>
-                                    <td>Amossé</td>
-                                    <td>1970-01-21 <em>(<?= getAge('1970-01-21') ?> ans)</em></td>
-                                </tr>
-                                <tr>
-                                    <td>Fils</td>
-                                    <td>Antoine</td>
-                                    <td>Giraud</td>
-                                    <td>2000-01-08 <em>(<?= getAge('2002-01-08') ?> ans)</em></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-sm-6">
+                        <?php if (empty($curGroup)): ?>
+                            <h4>Ma famille / mon groupe</h4>
+                            <p>
+                                Remplissez votre famille ou groupe afin de faciliter l'inscriptions aux événements ou l'accès à nos nouvelles.
+                            </p>
+                            <p><span class="btn btn-primary">C'est parti!</span></p>
+                        <?php else: ?>
+                            <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Lien</th>
+                                        <th>Prénom</th>
+                                        <th>Nom</th>
+                                        <th>Anniversaire</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($curGroup->persons as $elem): ?>
+                                        <tr>
+                                            <td><?= $elem['can_manage']?'<span class="glyphicon glyphicon-king"></span>':'' ?></td>
+                                            <td class="<?= in_array($elem['link'], ['pere', 'mere', 'fils', 'fille'])?'success':'warning' ?>"><?= $elem['link_name'] ?></td>
+                                            <td><?= $elem['firstname'] ?></td>
+                                            <td><?= $elem['lastname'] ?></td>
+                                            <td><?= !empty($elem['birthday']) ? $elem['birthday'].' <em>('. getAge($elem['birthday']) .' ans)</em>' : '' ?></td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                </tbody>
+                            </table>
+                        <?php endif ?>
                     </div>
                 </div>
 

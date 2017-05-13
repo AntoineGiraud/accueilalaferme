@@ -47,7 +47,7 @@ class Group {
             ];
             unset($this->prop['addr_pk'], $this->prop['addr_street'], $this->prop['addr_postal_code'], $this->prop['addr_city'], $this->prop['addr_region'], $this->prop['addr_country']);
 
-            $res = $DB->query( "SELECT p.*, phg.can_manage, phg.group_link_pk, phg.was_removed, phg.event_pk, gl.slug link
+            $res = $DB->query( "SELECT p.*, phg.can_manage, phg.group_link_pk, phg.was_removed, phg.event_pk, gl.slug link, gl.name link_name
                                 FROM person_has_group phg
                                     LEFT JOIN person p ON phg.person_id = p.pk
                                     LEFT JOIN group_link gl ON phg.group_link_pk = gl.pk

@@ -52,12 +52,11 @@ if (!empty($_POST)) {
             if ( is_wp_error( $res ) ) { // rollback
                 $error_msg = $res->get_error_message();
                 $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
-            } else {
-                $userWP = wp_get_current_user();
-                header('Location:'.$root.'famille');die();
+                header('Location:'.$root.'family');die();
             }
         }
     }
+    header('Location:'.$root.'profil');die();
 }
 
 
