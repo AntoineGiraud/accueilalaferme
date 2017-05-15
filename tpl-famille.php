@@ -40,10 +40,6 @@ if (!empty($_POST)) {
             if ($userWP->last_name != $majCurUser['lastname'])
                 $update['last_name'] = $majCurUser['lastname'];
             if (!empty($update)) {
-                var_dump($update);
-                var_dump($curPerson);
-                var_dump($curGroup->persons);
-                die();
                 $update['ID'] = $userWP->ID;
                 $res = wp_update_user( $update );
                 if ( is_wp_error( $res ) ) { // rollback
