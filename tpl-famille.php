@@ -28,6 +28,32 @@ if ($group_id) {
 if (!empty($_POST)) {
     try {
         $curGroup->saveGroup($_POST);
+        // Porter vers wordpress les MAJ dans les personnes
+        if (isset($curGroup->persons[$curPerson->data['pk']])) {
+            $majCurUser = $curGroup->persons[$curPerson->data['pk']];
+            $update = [];
+            $userWP = wp_get_current_user();
+            if ($userWP->user_email != $majCurUser['email'])
+                $update['user_email'] = $majCurUser['email'];
+            if ($userWP->first_name != $majCurUser['firstname'])
+                $update['first_name'] = $majCurUser['firstname'];
+            if ($userWP->last_name != $majCurUser['lastname'])
+                $update['last_name'] = $majCurUser['lastname'];
+            if (!empty($update)) {
+                var_dump($update);
+                var_dump($curPerson);
+                var_dump($curGroup->persons);
+                die();
+                $update['ID'] = $userWP->ID;
+                $res = wp_update_user( $update );
+                if ( is_wp_error( $res ) ) { // rollback
+                    $error_msg = $res->get_error_message();
+                    $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
+                    header('Location:'.$root.'family');die();
+                }
+            }
+        }
+        header('Location:'.$root.'profil');die();
     } catch (Exception $e) {
         $error_msg = $e->getMessage();
         $e = $curGroup->errors['other'];
@@ -35,28 +61,6 @@ if (!empty($_POST)) {
             $e['persons_errors'] = 'Erreurs champs personnes : '.implode(', ', array_keys($e['persons_errors']));
         $error_msg .= '<br>'.implode('<br>', $e);
     }
-    // Porter vers wordpress les MAJ dans les personnes
-    if (isset($curGroup->persons[$curPerson->data['pk']])) {
-        $majCurUser = $curGroup->persons[$curPerson->data['pk']];
-        $update = [];
-        $userWP = wp_get_current_user();
-        if ($userWP->user_email != $majCurUser['email'])
-            $update['user_email'] = $majCurUser['email'];
-        if ($userWP->first_name != $majCurUser['firstname'])
-            $update['first_name'] = $majCurUser['firstname'];
-        if ($userWP->last_name != $majCurUser['lastname'])
-            $update['last_name'] = $majCurUser['lastname'];
-        if (!empty($update)) {
-            $update['ID'] = $userWP->ID;
-            $res = wp_update_user( $update );
-            if ( is_wp_error( $res ) ) { // rollback
-                $error_msg = $res->get_error_message();
-                $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
-                header('Location:'.$root.'family');die();
-            }
-        }
-    }
-    header('Location:'.$root.'profil');die();
 }
 
 
