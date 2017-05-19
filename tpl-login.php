@@ -56,6 +56,7 @@ get_header();
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn btn-success">Se connecter</button>
+                            <a href="<?= get_bloginfo('url').'/register' ?>" class="btn btn-info">S'inscrire</a>
                           </div>
                         </div>
                     </form>

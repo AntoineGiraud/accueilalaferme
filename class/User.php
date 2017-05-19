@@ -80,7 +80,7 @@ class User {
             if ($new['email'] !== $old['email']) $update['email'] = 'email = "'.$new['email'].'"';
             if ($new['firstname'] !== $old['firstname']) $update['firstname'] = 'firstname = "'.$new['firstname'].'"';
             if ($new['lastname'] !== $old['lastname']) $update['lastname'] = 'lastname = "'.$new['lastname'].'"';
-            if ($new['birthday'] !== $old['birthday']) $update['birthday'] = 'birthday = "'.$new['birthday'].'"';
+            if ($new['birthday'] !== $old['birthday']) $update['birthday'] = 'birthday = '.(empty($new['birthday'])?'null':'"'.$new['birthday'].'"').'';
             if ($new['phone'] !== $old['phone']) $update['phone'] = 'phone = "'.$new['phone'].'"';
             if (!empty($update))
                 $DB->query("UPDATE person SET ".implode(', ', $update)." WHERE pk = ".$new['pk']);

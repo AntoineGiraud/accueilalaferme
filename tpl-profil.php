@@ -17,6 +17,8 @@ if (!empty($curPerson->groups)) {
     $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
 } else $curGroup = null;
 
+$events = $DB->query("SELECT * FROM event WHERE end_date >= NOW()");
+
 get_header();
     do_action('sydney_before_content'); ?>
 
@@ -43,32 +45,18 @@ get_header();
                                     <th>Début</th>
                                     <th>Fin</th>
                                     <th>Nom</th>
-                                    <th>Lieu</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>2017-07-21</td>
-                                    <td>2017-07-24</td>
-                                    <td>Camping des familles</td>
-                                    <td>Jardins de St-Georges</td>
-                                    <td><a href="#"><span class="glyphicon glyphicon-plus"></span></a></td>
-                                </tr>
-                                <tr>
-                                    <td>2017-05-03</td>
-                                    <td>2017-05-04</td>
-                                    <td>Pentecôte</td>
-                                    <td>Jardins de St-Georges</td>
-                                    <td><a href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                                </tr>
-                                <tr>
-                                    <td>2017-04-15</td>
-                                    <td>2017-04-18</td>
-                                    <td>Pâques</td>
-                                    <td>Jardins de St-Georges</td>
-                                    <td><a href="#"><span class="glyphicon glyphicon-info-sign"></span></a></td>
-                                </tr>
+                                <?php foreach ($events as $event): ?>
+                                    <tr>
+                                        <td><?= substr($event['start_date'], 0, 10) ?></td>
+                                        <td><?= substr($event['end_date'], 0, 10) ?></td>
+                                        <td><?= $event['name'] ?></td>
+                                        <td><a href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                    </tr>
+                                <?php endforeach ?>
                             </tbody>
                         </table>
                     </div>
