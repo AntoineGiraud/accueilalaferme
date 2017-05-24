@@ -24,6 +24,11 @@ if ($group_id && in_array($group_id, $curPerson->canManageGroupIds))
     $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
 else $curGroup = null;
 
+if (!empty($_POST)) {
+    var_dump($_POST);
+}
+
+
 if ($curGroup)
     $persons = $curGroup->persons;
 else
@@ -53,6 +58,8 @@ get_header();
                                     <th>Prénom</th>
                                     <th>Nom</th>
                                     <th>Anniversaire</th>
+                                    <th>Arrivée</th>
+                                    <th>Départ</th>
                                     <th>Participation</th>
                                 </tr>
                             </thead>
@@ -65,6 +72,22 @@ get_header();
                                     <td>{{member.firstname}}</td>
                                     <td>{{member.lastname}}</td>
                                     <td>{{member.birthday}}</td>
+                                    <td ng-class="{'has-error':member.errors.arrival_date}">
+                                        <p class="input-group" ng-init="arr_cal_open = false;">
+                                          <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="arr_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                          </span>
+                                          <input type="text" maxlength="10" name="persons[{{$index}}][arrival_date]" ng-model="member.arrival_date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="arr_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
+                                        </p>
+                                    </td>
+                                    <td ng-class="{'has-error':member.errors.departure_date}">
+                                        <p class="input-group" ng-init="dep_cal_open = false;">
+                                          <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="dep_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                          </span>
+                                          <input type="text" maxlength="10" name="persons[{{$index}}][departure_date]" ng-model="member.departure_date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="dep_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
+                                        </p>
+                                    </td>
                                     <td><label>
                                             <input type="checkbox" value="1" ng-model="member.will_come" name="persons[{{$index}}][will_come]">
                                     </label></td>
@@ -89,7 +112,9 @@ get_header();
         'angularjs_accueilalaferme/controllers/PageCtrl.js',
         'var groupData = '.json_encode([
             'persons' => $persons
-        ]).';',
+        ]).';
+        var start_date = "'.substr($event['start_date'], 0, 10).'";
+        var end_date = "'.substr($event['end_date'], 0, 10).'";',
         'angularjs_accueilalaferme/controllers/EventRegisterCtrl.js'
       ];
     do_action('sydney_after_content'); ?>

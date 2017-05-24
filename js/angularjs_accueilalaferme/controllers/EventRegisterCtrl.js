@@ -4,5 +4,32 @@ app.controller('EventRegisterCtrl', function($scope, $timeout, $window, $rootSco
     }
     $scope.group = groupData;
 
+    startEvent = start_date.split('-');
+    startEvent = new Date(startEvent[0], startEvent[1]-1, startEvent[2]);
+    endEvent = end_date.split('-');
+    endEvent = new Date(endEvent[0], endEvent[1]-1, endEvent[2]);
+
+    $scope.$watch('group.persons', function(newVals, oldVals) {
+        console.log('watch group persons', newVals);
+        for (k in newVals) {
+            row = newVals[k];
+            if (!row.will_come) {
+                row.departure_date = null;
+                row.arrival_date = null;
+            } else {
+                if (!row.arrival_date && startEvent)
+                    row.arrival_date = startEvent;
+                if (!row.departure_date && endEvent)
+                    row.departure_date = endEvent;
+            }
+
+            if (typeof row.errors == 'undefined') row.errors = {};
+            if (row.arrival_date > row.departure_date)
+                row.errors.arrival_date = true;
+            else
+                row.errors.arrival_date = false;
+        }
+    }, true);
+
     // $scope.addAlert("Message bidon", "danger", 5000);
 });
