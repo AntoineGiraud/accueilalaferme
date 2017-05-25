@@ -1,6 +1,16 @@
 app.controller('EventRegisterCtrl', function($scope, $timeout, $window, $rootScope, $interval){
     for (k in groupData.persons) {
         groupData.persons[k].will_come = Boolean(groupData.persons[k].will_come*1);
+        if (typeof groupData.persons[k].arrival_date != 'undefined' && groupData.persons[k].arrival_date) {
+            console.log(groupData.persons[k].arrival_date);
+            startEvent = groupData.persons[k].arrival_date.split('-');
+            groupData.persons[k].arrival_date = new Date(startEvent[0], startEvent[1]-1, startEvent[2]);
+        }
+        if (typeof groupData.persons[k].departure_date != 'undefined' && groupData.persons[k].departure_date) {
+            console.log(groupData.persons[k].departure_date);
+            endEvent = groupData.persons[k].departure_date.split('-');
+            groupData.persons[k].departure_date = new Date(endEvent[0], endEvent[1]-1, endEvent[2]);
+        }
     }
     $scope.group = groupData;
 
