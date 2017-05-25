@@ -21,6 +21,9 @@ function site_router() {
     $url = explode('?', $url, 2);
     $url_path = $url[0];
 
+    if (!current_user_can('administrator') && !is_admin())
+        add_filter('show_admin_bar', '__return_false');
+
     if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event_register'])) {
         add_filter('show_admin_bar', '__return_false');
         require __DIR__ . '/class/DB.php';
