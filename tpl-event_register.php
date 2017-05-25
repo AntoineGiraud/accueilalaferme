@@ -26,6 +26,8 @@ $person_ids = array_map(function($v){ return $v['pk']; }, $persons);
 $personRegistrations = [];
 $res = $DB->query("SELECT * FROM registration WHERE event_id = :event_id AND person_id IN (".implode(',', $person_ids).") ORDER BY update_date DESC", ['event_id' => $event_id]);
 foreach ($res as $row) {
+    $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
+    $row['departure_date'] = substr($row['departure_date'], 0, 10);
     if (!isset($personRegistrations[$row['person_id']]))
         $personRegistrations[$row['person_id']] = $row;
     else // on désactive la plus vieille inscriptions car doublon !
@@ -78,7 +80,6 @@ if (!empty($_POST)) {
             if (isset($personRegistrations[$new['pk']])) { // update address
                 $old = $personRegistrations[$new['pk']];
                 $update = [];
-                var_dump($new['will_come']);
                 if ($new['will_come']*1 !== $old['will_come']*1) $update['will_come'] = 'will_come = '.($new['will_come']*1).'';
                 if ($new['arrival_date'] !== $old['arrival_date']) $update['arrival_date'] = 'arrival_date = '.(empty($new['arrival_date'])?'null':'"'.$new['arrival_date'].'"').'';
                 if ($new['departure_date'] !== $old['departure_date']) $update['departure_date'] = 'departure_date = '.(empty($new['departure_date'])?'null':'"'.$new['departure_date'].'"').'';
