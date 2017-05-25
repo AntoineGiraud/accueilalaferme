@@ -187,7 +187,7 @@ class Group {
             $d = [ 'pk' => '', 'can_manage' => false, 'firstname' => '', 'lastname' => '', 'email' => '', 'phone' => '', 'birthday' => '' ];
         return [
             'prop' => [
-                'pk' => '', 'is_family' => '1', 'name' => $d['lastname'], 'phone' => '',
+                'pk' => '', 'is_family' => '1', 'name' => $d['lastname'], 'phone' => $d['phone'],
                 'address' => \AccueilALaFerme\Address::nullAddress()
             ],
             'persons' => [ [

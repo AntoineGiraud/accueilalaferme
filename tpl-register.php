@@ -7,8 +7,6 @@
 
 if (!empty($_POST)) {
     $d = $_POST;
-    var_dump($d );
-    die();
     if ($d['user_pass'] != $d['user_pass2'])
         $error_msg = 'Les 2 mots de passes ne correspondent pas.';
     else if (!is_email($d['user_email']))

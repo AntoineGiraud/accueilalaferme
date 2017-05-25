@@ -66,7 +66,7 @@ get_header();
                             <p>
                                 Remplissez votre famille ou groupe afin de faciliter l'inscriptions aux événements ou l'accès à nos nouvelles.
                             </p>
-                            <p><span class="btn btn-primary">C'est parti!</span></p>
+                            <p><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-primary">C'est parti !</a></p>
                         <?php else: ?>
                             <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
                             <table class="table table-bordered table-condensed">

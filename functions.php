@@ -47,8 +47,8 @@ function site_router() {
 
         global $curPerson;
         $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
-        if (empty($curPerson->data['is_allowed']))
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning', 'login');
+        // if (empty($curPerson->data['is_allowed']))
+        //     \AccueilALaFerme\Flash::setFlashAndRedirect("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning', 'login');
         if ($page == 'profil') {
             require 'tpl-profil.php';
         } else if ($page == 'famille') {

@@ -101,9 +101,9 @@ if (!empty($_POST)) {
             }
         }
         if ($maj)
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Mise à jour effectuée", 'success', 'event_register?event_id='.$event_id);
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Mise à jour effectuée", 'success', 'profil');
         else
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'event_register?event_id='.$event_id);
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
     } else
         $error_msg = implode('<br>', array_keys($error_msg));
 }
