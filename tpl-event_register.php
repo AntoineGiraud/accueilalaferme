@@ -123,7 +123,7 @@ get_header();
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants</legend>
+                    <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>
@@ -138,7 +138,7 @@ get_header();
                             </thead>
                             <tbody>
                                 <tr ng-repeat="member in group.persons track by $index" ng-class="{'success':member.pk==<?= $curPerson->data['pk'] ?>}">
-                                    <td>
+                                    <td ng-class="{'success':'pere' == member.link || 'mere' == member.link || 'fils' == member.link || 'fille' == member.link, 'warning':'pere' != member.link && 'mere' != member.link && 'fils' != member.link && 'fille' != member.link}">
                                         <input type="hidden" name="persons[{{$index}}][pk]" value="{{member.pk}}">
                                         {{member.link}}
                                     </td>

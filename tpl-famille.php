@@ -146,7 +146,7 @@ get_header();
                             </thead>
                             <tbody>
                                 <tr ng-repeat="member in group.persons track by $index" ng-class="{'success':member.pk==<?= $curPerson->data['pk'] ?>}">
-                                    <td>
+                                    <td ng-class="{'success':'pere' == member.link || 'mere' == member.link || 'fils' == member.link || 'fille' == member.link, 'warning':'pere' != member.link && 'mere' != member.link && 'fils' != member.link && 'fille' != member.link}">
                                         <input type="hidden" name="persons[{{$index}}][pk]" value="{{member.pk}}">
                                         <select class="form-control" name="persons[{{$index}}][link]" ng-model="member.link">
                                             <optgroup label="Parents">
