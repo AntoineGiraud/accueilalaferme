@@ -203,6 +203,9 @@ get_header();
                                             <option value="<?= $o['slug'] ?>" <?= $curResaOption == $o['slug'] ? 'selected' : '' ?>><?= $o['name'] ?></option>
                                         <?php endforeach ?>
                                     </select>
+                                    <?php if (!empty($opt['prop']['description'])): ?>
+                                        <span class="helt-text"><?= $opt['prop']['description'] ?></span>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         <?php endforeach ?>
