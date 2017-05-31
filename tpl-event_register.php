@@ -143,6 +143,7 @@ get_header();
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
+                <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des campings précédents, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
@@ -213,6 +214,7 @@ get_header();
                             <label class="col-sm-2 control-label" for="comment">Commentaire</label>
                             <div class="col-sm-10">
                                 <textarea name="attr[comment]" class="form-control" id="comment" rows="5" placeholder="Commentaire à notre intention"><?= !empty($curPersonResa['comment']['comment']) ? stripslashes($curPersonResa['comment']['comment']) : '' ?></textarea>
+                                <span class="helt-text">Allergies , besoins spécifiques (électricité requise, aide pour parents seuls,  etc.)/.<br>Si l’un de vos enfants aimerait participer à la musique pour les messes ou si vous pensez préparer une animation pour le vendredi soir.</span>
                             </div>
                         </div>
                     </fieldset>

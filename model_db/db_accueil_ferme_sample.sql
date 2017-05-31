@@ -26,7 +26,7 @@ INSERT INTO `registration_options` (`pk`, `slug`, `name`, `description`, `event_
 (2, 'tente', 'Tente', '', '2', 1),
 (3, 'roulotte', 'Roulotte', '', '2', 1),
 (4, 'besoin_placement', 'Besoin aide logement', '', '2', 1),
-(5, 'menu_vendredi_midi', 'Menu vendredi midi', 'Type de menu que vous apportez pour le repas du vendredi midi.', '2', NULL),
+(5, 'menu_vendredi_midi', 'Menu vendredi midi', 'Type de menu que vous apportez pour le repas du vendredi midi:<ul><li>A) Trois pains de sandwich (3 x 10 à 12 sandwich) œufs ou poulet ou jambon (une sorte à valider…)</li><li>B) Une salade 4 à 6 litres + 2 fromages + 2 sacs de chips (gros formats) (salade de macaroni, patate, riz ou autre à valider…)</li><li>C) Dessert pour 20 portions + 20 tranches de viandes froides + Gros sac de raisin sans pépins</li></ul>', '2', NULL),
 (6, 'A', 'Menu A', '', '2', 5),
 (7, 'B', 'Menu B', '', '2', 5),
 (8, 'C', 'Menu C', '', '2', 5);
