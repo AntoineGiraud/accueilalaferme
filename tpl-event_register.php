@@ -200,7 +200,7 @@ get_header();
                                 <div class="col-sm-10">
                                     <select class="form-control" name="attr[<?= $opt['prop']['slug'] ?>]">
                                         <?php foreach ($opt['options'] as $o): ?>
-                                            <option value="<?= $o['slug'] ?>" <?= $curResaOption ? 'selected' : '' ?>><?= $o['name'] ?></option>
+                                            <option value="<?= $o['slug'] ?>" <?= $curResaOption == $o['slug'] ? 'selected' : '' ?>><?= $o['name'] ?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
