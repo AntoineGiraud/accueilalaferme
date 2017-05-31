@@ -18,5 +18,15 @@ INSERT INTO `event_cat` (`pk`, `slug`, `name`, `description`) VALUES
 (5, 'noel', 'Noël', NULL);
 
 INSERT INTO `event` (`pk`, `slug`, `name`, `start_date`, `end_date`, `description`, `event_cat_pk`) VALUES
-(NULL, 'paques-2016', 'Pâques 2016', '2017-04-13 15:00:00', '2017-04-17 15:00:00', NULL, '2'),
-(NULL, 'camping-familles-2017', 'Camping des familles 2017', '2017-07-27 14:00:00', '2017-07-30 15:00:00', NULL, '1');
+(1, 'paques-2016', 'Pâques 2016', '2017-04-13 15:00:00', '2017-04-17 15:00:00', NULL, '2'),
+(2, 'camping-familles-2017', 'Camping des familles 2017', '2017-07-27 14:00:00', '2017-07-30 15:00:00', NULL, '1');
+
+INSERT INTO `registration_options` (`pk`, `slug`, `name`, `description`, `event_pk`, `parent_pk`) VALUES
+(1, 'campement', 'Type campement', '', '2', NULL),
+(2, 'tente', 'Tente', '', '2', 1),
+(3, 'roulotte', 'Roulotte', '', '2', 1),
+(4, 'besoin_placement', 'Besoin aide logement', '', '2', 1),
+(5, 'menu_vendredi_midi', 'Menu vendredi midi', 'Type de menu que vous apportez pour le repas du vendredi midi.', '2', NULL),
+(6, 'A', 'Menu A', '', '2', 5),
+(7, 'B', 'Menu B', '', '2', 5),
+(8, 'C', 'Menu C', '', '2', 5);

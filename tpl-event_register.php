@@ -22,6 +22,20 @@ $curGroup = ($group_id && in_array($group_id, $curPerson->canManageGroupIds)) ? 
 $persons = $curGroup ? array_values($curGroup->persons) : [$curPerson->data];
 $person_ids = array_map(function($v){ return $v['pk']; }, $persons);
 
+// Reservation options
+$options = [];
+$res = $DB->query("SELECT * FROM registration_options WHERE event_pk = :event_id", ['event_id' => $event_id]);
+foreach ($res as $row) {
+    if (!empty($row['parent_pk']) && !isset($options[$row['parent_pk']]))
+        $options[$row['parent_pk']] = ['options' => [], 'pk' => $row['parent_pk']];
+    else if (empty($row['parent_pk']) && !isset($options[$row['pk']]))
+        $options[$row['pk']] = ['options' => [], 'pk' => $row['pk']];
+    if (!empty($row['parent_pk']))
+        $options[$row['parent_pk']]['options'][$row['pk']] = $row;
+    else
+        $options[$row['pk']]['prop'] = $row;
+}
+
 // Récupérer les inscriptions présentes
 $personRegistrations = [];
 $res = $DB->query("SELECT * FROM registration WHERE event_id = :event_id AND person_id IN (".implode(',', $person_ids).") ORDER BY update_date DESC", ['event_id' => $event_id]);
@@ -33,6 +47,10 @@ foreach ($res as $row) {
     else // on désactive la plus vieille inscriptions car doublon !
         $DB->query('UPDATE registration SET will_come = 0 WHERE pk = '.$row['pk']);
 }
+
+$curPersonResa = isset($personRegistrations[$curPerson->data['pk']]) ? $personRegistrations[$curPerson->data['pk']] : [];
+if (!empty($curPersonResa['comment']))
+    $curPersonResa['comment'] = json_decode($curPersonResa['comment'], true);
 foreach ($persons as $k => $val) {
     if (isset($personRegistrations[$val['pk']])) {
         $resa = $personRegistrations[$val['pk']];
@@ -77,25 +95,30 @@ if (!empty($_POST)) {
     if (empty($error_msg)) {
         $maj = false;
         foreach ($_POST['persons'] as $key => $new) {
+            $comment = $new['pk'] == $curPerson->data['pk'] ? json_encode($_POST['attr']) : null;
+
             if (isset($personRegistrations[$new['pk']])) { // update address
                 $old = $personRegistrations[$new['pk']];
                 $update = [];
+                $d = [];
                 if ($new['will_come']*1 !== $old['will_come']*1) $update['will_come'] = 'will_come = '.($new['will_come']*1).'';
                 if ($new['arrival_date'] !== $old['arrival_date']) $update['arrival_date'] = 'arrival_date = '.(empty($new['arrival_date'])?'null':'"'.$new['arrival_date'].'"').'';
                 if ($new['departure_date'] !== $old['departure_date']) $update['departure_date'] = 'departure_date = '.(empty($new['departure_date'])?'null':'"'.$new['departure_date'].'"').'';
+                if ($comment !== $old['comment']) {$update['comment'] = 'comment = :comment'; $d['comment'] = $comment;}
                 if (!empty($update)) {
-                    $DB->query("UPDATE registration SET ".implode(', ', $update).", update_date=NOW() WHERE pk = ".$old['pk']);
+                    $DB->query("UPDATE registration SET ".implode(', ', $update).", update_date=NOW() WHERE pk = ".$old['pk'], $d);
                     $maj = true;
                 }
             } else if ($new['will_come']) { // Insert address
                 $new['pk'] = $DB->query(
-                        "INSERT INTO `registration` (`event_id`, `person_id`, `will_come`, `arrival_date`, `departure_date`, `register_date`, `update_date`)
-                        VALUES (:event_id, :person_id, :will_come, :arrival_date, :departure_date, NOW(), NOW())", [
+                        "INSERT INTO `registration` (`event_id`, `person_id`, `will_come`, `arrival_date`, `departure_date`, `register_date`, `update_date`, `comment`)
+                        VALUES (:event_id, :person_id, :will_come, :arrival_date, :departure_date, NOW(), NOW(), :comment)", [
                             'event_id' => $event_id,
                             'person_id' => $new['pk'],
                             'will_come' => $new['will_come']*1,
                             'arrival_date' => empty($new['arrival_date']) ? null : $new['arrival_date'],
-                            'departure_date' => empty($new['departure_date']) ? null : $new['departure_date']
+                            'departure_date' => empty($new['departure_date']) ? null : $new['departure_date'],
+                            'comment' => empty($comment) ? null : $comment
                         ]);
                 $maj = true;
             }
@@ -123,7 +146,7 @@ get_header();
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                    <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>
@@ -167,6 +190,28 @@ get_header();
                                 </tr>
                             </tbody>
                         </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Autre</legend>
+                        <?php foreach ($options as $pk => $opt):
+                            $curResaOption = !empty($curPersonResa['comment'][$opt['prop']['slug']]) ? $curPersonResa['comment'][$opt['prop']['slug']] : '';?>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="<?= $opt['prop']['slug'] ?>"><?= $opt['prop']['name'] ?></label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="attr[<?= $opt['prop']['slug'] ?>]">
+                                        <?php foreach ($opt['options'] as $o): ?>
+                                            <option value="<?= $o['slug'] ?>" <?= $curResaOption ? 'selected' : '' ?>><?= $o['name'] ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="comment">Commentaire</label>
+                            <div class="col-sm-10">
+                                <textarea name="attr[comment]" class="form-control" id="comment" rows="5" placeholder="Commentaire à notre intention"><?= !empty($curPersonResa['comment']['comment']) ? stripslashes($curPersonResa['comment']['comment']) : '' ?></textarea>
+                            </div>
+                        </div>
                     </fieldset>
                     <hr>
                     <div class="form-group">
