@@ -24,7 +24,7 @@ function site_router() {
     if (!current_user_can('administrator') && !is_admin())
         add_filter('show_admin_bar', '__return_false');
 
-    if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event_register'])) {
+    if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event_register', 'event_guests'])) {
         add_filter('show_admin_bar', '__return_false');
         require __DIR__ . '/class/DB.php';
         require __DIR__ . '/class/User.php';
@@ -36,7 +36,7 @@ function site_router() {
 
         $page = $url[0];
         $userWP = wp_get_current_user();
-        if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register']))
+        if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register', 'event_guests']))
             \AccueilALaFerme\Flash::setFlashAndRedirect("Vous devez être connecté pour accéder à l'espace membre.", 'danger', 'login');
         // Auth pages
         if ($page == 'login') {
@@ -58,6 +58,8 @@ function site_router() {
             require 'tpl-famille.php';
         } else if ($page == 'event_register') {
             require 'tpl-event_register.php';
+        } else if ($page == 'event_guests') {
+            require 'tpl-event_guests.php';
         }
         die();
     }

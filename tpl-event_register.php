@@ -137,7 +137,9 @@ get_header();
 	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
 		<main id="main" class="site-main hentry page" role="main" ng-controller="EventRegisterCtrl">
             <header class="entry-header">
-                <h1 class="title-post entry-title"><?= $event['name'] ?></h1>
+                <h1 class="title-post entry-title"><?= $event['name'] ?> <?php if (current_user_can('administrator')): ?>
+                    <small><a href="<?= get_bloginfo('url').'/event_guests?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> Liste invités</a></small>
+                <?php endif ?></h1>
                 <p>Du <?= substr($event['start_date'], 0, 10) ?> au <?= substr($event['end_date'], 0, 10) ?></p>
             </header>
                 <?php if (!empty($error_msg)): ?>
