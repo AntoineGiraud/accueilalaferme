@@ -36,13 +36,12 @@ foreach ($res as $row) {
 
 // Récupérer les inscriptions présentes
 $personRegistrations = [];
-$res = $DB->query("SELECT p.*, r.arrival_date, r.departure_date, r.register_date, r.comment, pg.group_id, g.name group_name, g.is_family
-                    FROM registration r
-                        LEFT JOIN person p ON p.pk = r.person_id
+$res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.register_date, r.comment, pg.group_id, g.name group_name, g.is_family
+                    FROM person p
+                        LEFT JOIN registration r ON p.pk = r.person_id
                         LEFT JOIN person_has_group pg ON p.pk = pg.person_id
                         LEFT JOIN groupe g ON g.pk = pg.group_id
-                    WHERE event_id = :event_id
-                        AND will_come = 1", ['event_id' => $event_id]);
+                        "); // , ['event_id' => $event_id]); // WHERE -- event_id = :event_id
 foreach ($res as $row) {
     $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
     $row['departure_date'] = substr($row['departure_date'], 0, 10);
@@ -67,6 +66,7 @@ get_header();
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <tr>
+                            <th>will come</th>
                             <th>mail</th>
                             <th>prénom</th>
                             <th>nom</th>
@@ -84,12 +84,13 @@ get_header();
                         <tr>
                             <?php foreach ($personRegistrations as $person): ?>
                                 <tr>
+                                    <td class="<?= $person['will_come'] == 1 ? 'success' : ($person['will_come']===null ? 'warning':'danger') ?>"><?= $person['will_come'] ?></td>
                                     <td><?= $person['email'] ?></td>
                                     <td><?= stripslashes($person['firstname']) ?></td>
                                     <td><?= stripslashes($person['lastname']) ?></td>
                                     <td><?= $person['birthday'] ?></td>
                                     <td><?= $person['phone'] ?></td>
-                                    <td><?= empty($person['comment']) ? '' : implode('<br>', json_decode($person['comment'], true)) ?></td>
+                                    <td><?= empty($person['comment']) ? '' : implode(" ; ", json_decode($person['comment'], true)) ?></td>
                                     <td><?= $person['arrival_date'] ?></td>
                                     <td><?= $person['departure_date'] ?></td>
                                     <td><?= $person['register_date'] ?></td>
