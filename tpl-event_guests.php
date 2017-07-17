@@ -41,6 +41,7 @@ $res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.
                         LEFT JOIN registration r ON p.pk = r.person_id
                         LEFT JOIN person_has_group pg ON p.pk = pg.person_id
                         LEFT JOIN groupe g ON g.pk = pg.group_id
+                    where pg.was_removed is null
                         "); // , ['event_id' => $event_id]); // WHERE -- event_id = :event_id
 foreach ($res as $row) {
     $row['arrival_date'] = substr($row['arrival_date'], 0, 10);

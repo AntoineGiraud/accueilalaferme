@@ -54,7 +54,7 @@ get_header();
                                         <td><?= substr($event['start_date'], 0, 10) ?></td>
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
-                                        <td><a href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                                        <td><a style="height: auto;" href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>" class="btn btn-primary btn-xs">s'inscrire</a></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
