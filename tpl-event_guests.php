@@ -42,7 +42,7 @@ $res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.
                         LEFT JOIN person_has_group pg ON p.pk = pg.person_id
                         LEFT JOIN groupe g ON g.pk = pg.group_id
                     where pg.was_removed is null
-                        "); // , ['event_id' => $event_id]); // WHERE -- event_id = :event_id
+                    order by pg.group_id, pg.group_link_pk, p.pk"); // , ['event_id' => $event_id]); // WHERE -- event_id = :event_id
 foreach ($res as $row) {
     $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
     $row['departure_date'] = substr($row['departure_date'], 0, 10);
@@ -63,7 +63,7 @@ get_header();
                 <p>Du <?= substr($event['start_date'], 0, 10) ?> au <?= substr($event['end_date'], 0, 10) ?></p>
             </header>
             <div>
-                <h4>Participants à l'événement</h4>
+                <h4>Participants à l'événement <small><?= count($personRegistrations) ?></small></h4>
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <tr>
