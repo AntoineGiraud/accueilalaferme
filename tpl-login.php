@@ -1,16 +1,14 @@
 <?php
-/**
- * Template Name: Connexion
- *
- * @package Sydney
- */
-
 
 if (!empty($_POST)) {
     $userWP = wp_signon($_POST);
     if (is_wp_error($userWP))
         $error_msg = $userWP->get_error_message();
-    else
+    else if (!empty($_SESSION['url'])) {
+        $url = implode('?', $_SESSION['url']);
+        unset($_SESSION['url']);
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Authentification réussie.", 'success', $url);
+    } else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Authentification réussie.", 'success', 'profil');
 }
 

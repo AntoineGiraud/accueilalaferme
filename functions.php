@@ -36,8 +36,10 @@ function site_router() {
 
         $page = $url[0];
         $userWP = wp_get_current_user();
-        if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register', 'event_guests']))
+        if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register', 'event_guests'])) {
+            $_SESSION['url'] = $url;
             \AccueilALaFerme\Flash::setFlashAndRedirect("Vous devez être connecté pour accéder à l'espace membre.", 'danger', 'login');
+        }
         // Auth pages
         if ($page == 'login') {
             require 'tpl-login.php'; die();
