@@ -190,7 +190,9 @@ get_header();
                                     <td>
                                         <input type="hidden" name="persons[{{$index}}][can_manage]" value="{{member.can_manage}}" ng-show="member.pk==<?= $curPerson->data['pk'] ?>">
                                         <label ng-hide="member.pk==<?= $curPerson->data['pk'] ?>">
-                                            <input type="checkbox" value="1" ng-model="member.can_manage" name="persons[{{$index}}][can_manage]">
+                                            <input type="hidden" ng-model="member.can_manage" value="{{member.can_manage*1}}" name="persons[{{$index}}][can_manage]">
+                                            <a class="btn btn-xs btn-success" ng-click="member.can_manage=!member.can_manage" ng-show="member.can_manage">oui</a>
+                                            <a class="btn btn-xs btn-danger" ng-click="member.can_manage=!member.can_manage" ng-hide="member.can_manage">non</a>
                                         </label>
                                     </td>
                                     <td>
@@ -206,7 +208,7 @@ get_header();
                     <hr>
                     <div class="form-group">
                       <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Mettre à jour</button>
+                        <button type="submit" class="btn btn-success">Sauvegarder</button>
                       </div>
                     </div>
                 </form>

@@ -5,7 +5,6 @@
  * @package Sydney
  */
 global $curPerson;
-
 if (!empty($_GET['event_id']))
     $event_id = $_GET['event_id']*1;
 else if (!empty($_POST['event_id']))
@@ -124,7 +123,7 @@ if (!empty($_POST)) {
             }
         }
         if ($maj)
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Mise à jour effectuée", 'success', 'profil');
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Mise à jour des réservations à l'événement <code>".$event['name']."</code> effectuée", 'success', 'profil');
         else
             \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
     } else
@@ -188,7 +187,9 @@ get_header();
                                         </p>
                                     </td>
                                     <td><label>
-                                            <input type="checkbox" value="1" ng-model="member.will_come" name="persons[{{$index}}][will_come]">
+                                            <input type="hidden" value="{{member.will_come*1}}" ng-model="member.will_come" name="persons[{{$index}}][will_come]">
+                                            <a class="btn btn-xs btn-success" ng-click="member.will_come=!member.will_come" ng-show="member.will_come">oui</a>
+                                            <a class="btn btn-xs btn-danger" ng-click="member.will_come=!member.will_come" ng-hide="member.will_come">non</a>
                                     </label></td>
                                 </tr>
                             </tbody>
@@ -223,7 +224,7 @@ get_header();
                     <hr>
                     <div class="form-group">
                       <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Mettre à jour</button>
+                        <button type="submit" class="btn btn-success">Sauvegarder</button>
                       </div>
                     </div>
                 </form>

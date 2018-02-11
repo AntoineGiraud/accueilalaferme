@@ -115,7 +115,7 @@ class Group {
                                 'group_id' => $this->prop['pk'],
                                 'person_id' => $row['pk'],
                                 'group_link_pk' => $row['group_link_pk'],
-                                'can_manage' => $row['can_manage'],
+                                'can_manage' => $row['can_manage']*1,
                                 'event_pk' => $event_pk
                             ]);
                 } else {

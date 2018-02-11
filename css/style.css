@@ -3,6 +3,6 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     padding: 6px 12px;
 }
 
-.table .btn {height: 34px;}
+/*.table .btn {height: 34px;}*/
 
 .uib-datepicker-popup th, .uib-datepicker-popup td {border: none;}
