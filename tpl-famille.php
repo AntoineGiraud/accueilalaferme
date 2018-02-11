@@ -49,7 +49,9 @@ if (!empty($_POST)) {
                 }
             }
         }
-        header('Location:'.$root.'profil');die();
+        $url = !empty($_GET['register_event']) ? 'event_register?event_id='.$_GET['register_event'] : 'profil';
+        header('Location:'.$root.$url);
+        die();
     } catch (Exception $e) {
         $error_msg = $e->getMessage();
         $e = $curGroup->errors['other'];

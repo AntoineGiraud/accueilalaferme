@@ -8,7 +8,8 @@
 if (!empty($_SESSION['url'])) {
     $url = implode('?', $_SESSION['url']);
     unset($_SESSION['url']);
-    \AccueilALaFerme\Flash::setFlashAndRedirect("Veuillez continuer votre inscription, n'oubliez pas de renseigner votre <a href=\"".get_bloginfo('url')."/famille\" class=\"btn btn-info btn-xs\">groupe/famille</a>", 'success', $url);
+    header('Location:'.$root.$url);
+    die();
 }
 
 if (!empty($curPerson->groups)) {

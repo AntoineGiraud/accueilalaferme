@@ -81,7 +81,7 @@ function add_last_nav_item($items) {
     $userWP = wp_get_current_user();
     global $curPerson;
     ob_start(); ?>
-    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="#">Membres</a>
+    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="<?= $blogUrl ?>/profil">Membres</a>
         <ul class="sub-menu" style="display: none;">
             <?php if (!$userWP->ID): ?>
                 <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp; Se connecter</a></li>

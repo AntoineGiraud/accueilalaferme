@@ -145,11 +145,11 @@ get_header();
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
-                <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des évnéments à la ferme, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
+                <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des événements à la ferme, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?register_event='.$event['pk'] ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>
