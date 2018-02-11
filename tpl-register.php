@@ -11,9 +11,13 @@ if (!empty($_POST)) {
         $error_msg = 'Les 2 mots de passes ne correspondent pas.';
     else if (!is_email($d['user_email']))
         $error_msg = 'Veuillez entrer un email valide.';
+    else if (!empty($d['birthday']) && !preg_match('/[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1}/', $d['birthday']))
+        $error_msg = 'Entrez une date au format yyyy-mm-dd';
     else if (empty($d['user_pass']) || empty($d['user_login']) || empty($d['first_name']) || empty($d['last_name']))
         $error_msg = 'Veuillez remplir tous les champs.';
     else {
+        foreach (['user_login','user_email','first_name','last_name','phone','birthday'] as $key)
+            $d[$key] = trim($d[$key]);
         $user = wp_insert_user([
             'user_login' => $d['user_login'],
             'user_email' => $d['user_email'],
@@ -25,6 +29,7 @@ if (!empty($_POST)) {
         if (is_wp_error($user)) {
             $error_msg = $user->get_error_message();
         } else {
+            if (empty($d['birthday'])) $d['birthday'] = null;
             $curPerson = new \AccueilALaFerme\User($DB, null, $d['user_email'], $d['first_name'], $d['last_name'], $d['birthday'], $d['phone']);
             // add_user_meta($user, 'cp', 'code postal ?'); // champ perso - get_user_meta()
             $msg = 'Vous êtes désormais inscrit au site Accueil à la ferme :)';
@@ -90,7 +95,7 @@ get_header();
                                   <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
-                                  <input type="text" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" maxlength="10" name="birthday" id="birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                  <input type="date" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" maxlength="10" name="birthday" id="birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
                                 </p>
                             </div>
                         </div>

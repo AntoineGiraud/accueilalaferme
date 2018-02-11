@@ -9,6 +9,13 @@
 // Fonctions Accueil à la ferme //
 //////////////////////////////////
 
+function getAge($anniversaire) {
+    $date = new DateTime($anniversaire);
+    $now = new DateTime();
+    $interval = $now->diff($date);
+    return $interval->y;
+}
+
 global $js_for_layout;
 require __DIR__ . '/class/Flash.php';
 add_action('send_headers', 'site_router');
@@ -21,21 +28,25 @@ function site_router() {
     $url = explode('?', $url, 2);
     $url_path = $url[0];
 
+    require __DIR__ . '/class/DB.php';
+    require __DIR__ . '/class/User.php';
+    require __DIR__ . '/class/Group.php';
+    require __DIR__ . '/class/Address.php';
+
+    $confSQL = $conf['confSQL'];
+    $DB = new \AccueilALaFerme\DB($confSQL['sql_host'], $confSQL['sql_user'], $confSQL['sql_pass'], $confSQL['sql_db']);
+    $userWP = wp_get_current_user();
+    global $curPerson;
+    if ($userWP->ID)
+        $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
+
     if (!current_user_can('administrator') && !is_admin())
         add_filter('show_admin_bar', '__return_false');
 
     if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event_register', 'event_guests'])) {
         add_filter('show_admin_bar', '__return_false');
-        require __DIR__ . '/class/DB.php';
-        require __DIR__ . '/class/User.php';
-        require __DIR__ . '/class/Group.php';
-        require __DIR__ . '/class/Address.php';
-
-        $confSQL = $conf['confSQL'];
-        $DB = new \AccueilALaFerme\DB($confSQL['sql_host'], $confSQL['sql_user'], $confSQL['sql_pass'], $confSQL['sql_db']);
 
         $page = $url[0];
-        $userWP = wp_get_current_user();
         if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register', 'event_guests'])) {
             $_SESSION['url'] = $url;
             \AccueilALaFerme\Flash::setFlashAndRedirect("Vous devez être connecté pour accéder à l'espace membre.", 'danger', 'login');
@@ -50,8 +61,6 @@ function site_router() {
             header('Location:'.$root); die();
         }
 
-        global $curPerson;
-        $curPerson = new \AccueilALaFerme\User($DB, null, $userWP->user_email, $userWP->first_name, $userWP->last_name);
         // if (empty($curPerson->data['is_allowed']))
         //     \AccueilALaFerme\Flash::setFlashAndRedirect("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning', 'login');
         if ($page == 'profil') {

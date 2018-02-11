@@ -145,7 +145,7 @@ get_header();
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
-                <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des campings précédents, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
+                <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des évnéments à la ferme, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
@@ -163,7 +163,7 @@ get_header();
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="member in group.persons track by $index" ng-class="{'success':member.pk==<?= $curPerson->data['pk'] ?>}">
+                                <tr ng-repeat="member in group.persons track by $index" ng-class="{'success':member.will_come}">
                                     <td ng-class="{'success':'pere' == member.link || 'mere' == member.link || 'fils' == member.link || 'fille' == member.link, 'warning':'pere' != member.link && 'mere' != member.link && 'fils' != member.link && 'fille' != member.link}">
                                         <input type="hidden" name="persons[{{$index}}][pk]" value="{{member.pk}}">
                                         {{member.link}}

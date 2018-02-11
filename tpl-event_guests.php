@@ -39,10 +39,10 @@ $personRegistrations = [];
 $res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.register_date, r.comment, pg.group_id, g.name group_name, g.is_family
                     FROM person p
                         LEFT JOIN registration r ON p.pk = r.person_id
-                        LEFT JOIN person_has_group pg ON p.pk = pg.person_id
+                        LEFT JOIN person_has_group pg ON p.pk = pg.person_id and pg.was_removed is null
                         LEFT JOIN groupe g ON g.pk = pg.group_id
-                    where pg.was_removed is null
-                    order by pg.group_id, pg.group_link_pk, p.pk"); // , ['event_id' => $event_id]); // WHERE -- event_id = :event_id
+                    where event_id = :event_id and r.will_come=1
+                    order by pg.group_id, pg.group_link_pk, p.pk", ['event_id' => $event_id]);
 foreach ($res as $row) {
     $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
     $row['departure_date'] = substr($row['departure_date'], 0, 10);

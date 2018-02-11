@@ -5,11 +5,10 @@
  * @package Sydney
  */
 
-function getAge($anniversaire) {
-    $date = new DateTime($anniversaire);
-    $now = new DateTime();
-    $interval = $now->diff($date);
-    return $interval->y;
+if (!empty($_SESSION['url'])) {
+    $url = implode('?', $_SESSION['url']);
+    unset($_SESSION['url']);
+    \AccueilALaFerme\Flash::setFlashAndRedirect("Veuillez continuer votre inscription, n'oubliez pas de renseigner votre <a href=\"".get_bloginfo('url')."/famille\" class=\"btn btn-info btn-xs\">groupe/famille</a>", 'success', $url);
 }
 
 if (!empty($curPerson->groups)) {
@@ -17,8 +16,25 @@ if (!empty($curPerson->groups)) {
     $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
 } else $curGroup = null;
 
-$events = $DB->query("SELECT * FROM event WHERE end_date >= NOW()");
+// Récupérer les inscriptions présentes
+$groupSql = !empty($group_id) ? 'pg.group_id = :group_id and ' : 'p.pk = :p_id and';
+$data = !empty($group_id) ? ['group_id' => $group_id] : ['p_id' => $curPerson->data['pk']];
+$res = $DB->query("SELECT p.firstname, p.lastname, r.arrival_date, r.departure_date, r.event_id
+                    FROM registration r
+                        LEFT JOIN person p ON p.pk = r.person_id
+                        LEFT JOIN person_has_group pg ON p.pk = pg.person_id and pg.was_removed is null
+                    where $groupSql r.will_come=1
+                    order by r.event_id, pg.group_id, pg.group_link_pk, p.pk", $data);
+$register = [];
+foreach ($res as $row) {
+    $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
+    $row['departure_date'] = substr($row['departure_date'], 0, 10);
+    if (!isset($register[$row['event_id']]))
+        $register[$row['event_id']] = [];
+    $register[$row['event_id']][] = $row;
+}
 
+$events = $DB->query("SELECT * FROM event WHERE end_date >= NOW()");
 get_header();
     do_action('sydney_before_content'); ?>
 
@@ -37,7 +53,7 @@ get_header();
 				</div><!-- .page-content -->
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>Prochains événements</h4>
                         <table class="table table-bordered table-condensed">
                             <thead>
@@ -46,6 +62,7 @@ get_header();
                                     <th>Fin</th>
                                     <th>Nom</th>
                                     <th>Option</th>
+                                    <th>Participants</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,13 +71,18 @@ get_header();
                                         <td><?= substr($event['start_date'], 0, 10) ?></td>
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
-                                        <td><a style="height: auto;" href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>" class="btn btn-primary btn-xs">s'inscrire</a></td>
+                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
+                                            <td>
+                                        <?php if (!empty($register[$event['pk']])): ?>
+                                                <?= implode(', ', array_map(function($d){return '<span title="'.$d['firstname'].' '.$d['lastname']."\n arrivée: ".$d['arrival_date']."\n départ: ".$d['departure_date']."\n".'">'.$d['firstname'].'</span>';}, $register[$event['pk']])) ?>
+                                        <?php endif ?>
+                                            </td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <?php if (empty($curGroup)): ?>
                             <h4>Ma famille / mon groupe</h4>
                             <p>
