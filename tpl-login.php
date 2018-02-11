@@ -55,6 +55,7 @@ get_header();
                           <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn btn-success">Se connecter</button>
                             <a href="<?= get_bloginfo('url').'/register' ?>" class="btn btn-info">S'inscrire</a>
+                            <a href="<?= get_bloginfo('url').'/wp-login.php?action=lostpassword' ?>" class="btn btn-default">Oubli mot de passe</a>
                           </div>
                         </div>
                     </form>
