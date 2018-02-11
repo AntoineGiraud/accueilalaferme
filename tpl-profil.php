@@ -1,8 +1,8 @@
 <?php
 /**
- * Template Name: Profil
+ * Template Name: Home page
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 
 if (!empty($_SESSION['url'])) {

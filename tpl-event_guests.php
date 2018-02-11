@@ -1,8 +1,8 @@
 <?php
 /**
- * Template Name: Profil
+ * Template Name: List event guests
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 global $curPerson;
 

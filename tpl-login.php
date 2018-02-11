@@ -1,4 +1,9 @@
 <?php
+/**
+ * Template Name: Form login
+ *
+ * @package accueilalaferme
+ */
 
 if (!empty($_POST)) {
     $userWP = wp_signon($_POST);

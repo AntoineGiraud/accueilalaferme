@@ -1,8 +1,8 @@
 <?php
 /**
- * Template Name: Profil
+ * Template Name: Form event registration
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 global $curPerson;
 if (!empty($_GET['event_id']))
@@ -148,7 +148,7 @@ get_header();
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?register_event='.$event['pk'] ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>

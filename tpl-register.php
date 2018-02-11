@@ -1,8 +1,8 @@
 <?php
 /**
- * Template Name: Inscription
+ * Template Name: Registration
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 
 if (!empty($_POST)) {
@@ -39,7 +39,10 @@ if (!empty($_POST)) {
                 'user_login' => $d['user_login'],
                 'user_password' => $d['user_pass']
             ]);
-            header('Location:profil');
+            if ($_SESSION['url'][0] == "event_register")
+                \AccueilALaFerme\Flash::setFlashAndRedirect("Avant de continuer vers l'enregistrement à l'événement, veuillez renseigner votre famille ou groupe.<br><em>Si vous êtes seul: vous pouvez <a href=\"".$root.implode('?', $_SESSION['url'])."\">continuer vers l'événement</a></em>", 'success', 'famille?'.$_SESSION['url'][1]);
+            header('Location:'.$root.'profil');
+            die();
         }
     }
 }
@@ -54,6 +57,9 @@ get_header();
             </header>
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
+                <?php endif ?>
+                <?php if (!empty($_SESSION['url'])): ?>
+                    <p class="alert alert-info">Avant de continuer<?= $_SESSION['url'][0] == "event_register" ? " vers l'enregistrement à l'événement" : '' ?>, veuillez vous inscrire à accueil à la ferme.</p>
                 <?php endif ?>
 
 				<div class="page-content">

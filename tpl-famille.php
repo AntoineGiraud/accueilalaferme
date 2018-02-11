@@ -1,8 +1,8 @@
 <?php
 /**
- * Template Name: Profil
+ * Template Name: Form edit family/group
  *
- * @package Sydney
+ * @package accueilalaferme
  */
 global $curPerson;
 
@@ -49,7 +49,7 @@ if (!empty($_POST)) {
                 }
             }
         }
-        $url = !empty($_GET['register_event']) ? 'event_register?event_id='.$_GET['register_event'] : 'profil';
+        $url = !empty($_GET['event_id']) ? 'event_register?event_id='.$_GET['event_id'] : 'profil';
         header('Location:'.$root.$url);
         die();
     } catch (Exception $e) {
