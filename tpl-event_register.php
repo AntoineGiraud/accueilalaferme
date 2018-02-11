@@ -123,7 +123,7 @@ if (!empty($_POST)) {
             }
         }
         if ($maj)
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Mise à jour des réservations à l'événement <code>".$event['name']."</code> effectuée", 'success', 'profil');
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil');
         else
             \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
     } else

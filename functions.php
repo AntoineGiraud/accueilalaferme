@@ -81,21 +81,21 @@ function add_last_nav_item($items) {
     $userWP = wp_get_current_user();
     global $curPerson;
     ob_start(); ?>
-    <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children"><a href="<?= $blogUrl ?>/profil">Membres</a>
-        <ul class="sub-menu" style="display: none;">
+    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a href="<?= $blogUrl ?>/profil">Membres</a>
+        <ul class="sub-menu">
             <?php if (!$userWP->ID): ?>
-                <li id="se-connecter" class="menu-item menu-item-type-custom menu-item-object-custom se-connecter"><a href="<?= $blogUrl ?>/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp; Se connecter</a></li>
-                <li id="register" class="menu-item menu-item-type-custom menu-item-object-custom register"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; S'inscrire</a></li>
+                <li id="se-connecter" class="menu-item menu-item-type-post_type menu-item-object-page se-connecter"><a href="<?= $blogUrl ?>/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp; Se connecter</a></li>
+                <li id="register" class="menu-item menu-item-type-post_type menu-item-object-page register"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; S'inscrire</a></li>
             <?php else: ?>
-                <li id="profil" class="menu-item menu-item-type-custom menu-item-object-custom profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $userWP->first_name ?></em></small></a></li>
-                <li id="famille" class="menu-item menu-item-type-custom menu-item-object-custom famille"><a href="<?= $blogUrl ?>/famille"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;
+                <li id="profil" class="menu-item menu-item-type-post_type menu-item-object-page profil"><a href="<?= $blogUrl ?>/profil"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp; Profil <small><em><?= $userWP->first_name ?></em></small></a></li>
+                <li id="famille" class="menu-item menu-item-type-post_type menu-item-object-page famille"><a href="<?= $blogUrl ?>/famille"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;
                     <?php if (!empty($curPerson->groups)): $curGroup = current($curPerson->groups); ?>
                         <?= $curGroup['is_family']?'Famille':'Group' ?> <small><em><?= $curGroup['name'] ?></em></small>
                     <?php else: ?>
                         Créer ma famille/groupe
                     <?php endif; ?>
                 </a></li>
-                <li id="se-déconnecter" class="menu-item menu-item-type-custom menu-item-object-custom se-déconnecter"><a href="<?= $blogUrl ?>/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp; Se déconnecter</a></li>
+                <li id="se-déconnecter" class="menu-item menu-item-type-post_type menu-item-object-page se-déconnecter"><a href="<?= $blogUrl ?>/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp; Se déconnecter</a></li>
             <?php endif ?>
         </ul>
     </li>
