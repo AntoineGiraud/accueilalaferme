@@ -72,7 +72,7 @@ get_header();
                                         <td><?= substr($event['start_date'], 0, 10) ?></td>
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
-                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event_register?event_id='.$event['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
+                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
                                             <td>
                                         <?php if (!empty($register[$event['pk']])): ?>
                                                 <?= implode(', ', array_map(function($d){return '<span title="'.$d['firstname'].' '.$d['lastname']."\n arrivée: ".$d['arrival_date']."\n départ: ".$d['departure_date']."\n".'">'.$d['firstname'].'</span>';}, $register[$event['pk']])) ?>

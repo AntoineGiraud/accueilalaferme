@@ -63,6 +63,12 @@ class Group {
     }
 
     public function saveGroup($post, $event_pk=null) {
+        $opMaj = [
+            'groupe'=>'',
+            'ajout'=>0,
+            'maj'=>0,
+            'retrait'=>0
+        ];
         extract($this->validateData($post));
         if (!empty($errors)) {
             $this->errors = $errors;
@@ -85,6 +91,7 @@ class Group {
                                 'is_family' => $post['is_family'],
                                 'event_pk' => $event_pk
                             ]);
+                $opMaj['group'] = 'Ajout '.($post['is_family']?'de la famille':'du groupe');
             } else { // update group
                 $update = [];
                 if ($post['name'] !== $this->prop['name'])
@@ -95,8 +102,10 @@ class Group {
                     $update['is_family'] = 'is_family = '.$post['is_family'].'';
                 if ($post['address']['pk'] !== $this->prop['address']['pk'])
                     $update['address_pk'] = 'address_pk = '.(empty($this->prop['address']['pk'])?'null':$this->prop['address']['pk']).'';
-                if (!empty($update))
+                if (!empty($update)) {
                     $this->DB->query("UPDATE `groupe` SET ".implode(', ', $update)." WHERE pk = ".$this->prop['pk']);
+                    $opMaj['group'] = '<abbr title="Mise à jour">MAJ</abbr> '.($post['is_family']?'de la famille':'du groupe');
+                }
             }
             $this->prop['name'] = trim($post['name']);
             $this->prop['phone'] = trim($post['phone']);

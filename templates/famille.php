@@ -49,7 +49,7 @@ if (!empty($_POST)) {
                 }
             }
         }
-        $url = !empty($_GET['event_id']) ? 'event_register?event_id='.$_GET['event_id'] : 'profil';
+        $url = !empty($_GET['event_id']) ? 'event/register?event_id='.$_GET['event_id'] : 'profil';
         header('Location:'.$root.$url);
         die();
     } catch (Exception $e) {

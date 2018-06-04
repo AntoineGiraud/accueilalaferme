@@ -43,19 +43,21 @@ function site_router() {
     if (!current_user_can('administrator') && !is_admin())
         add_filter('show_admin_bar', '__return_false');
 
-    if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event_register', 'event_guests'])) {
+    if (in_array($url_path, ['login', 'register', 'logout', 'famille', 'profil', 'event/register', 'event/guests'])
+        || strpos($url_path, 'event') === 0
+        ) {
         add_filter('show_admin_bar', '__return_false');
 
         $page = $url[0];
-        if (!$userWP->ID && in_array($page, ['famille', 'profil', 'event_register', 'event_guests'])) {
+        if (!$userWP->ID && !in_array($page, ['login', 'register', 'logout'])) {
             $_SESSION['url'] = $url;
             \AccueilALaFerme\Flash::setFlashAndRedirect("Vous devez être connecté pour accéder à l'espace membre.", 'danger', 'login');
         }
         // Auth pages
         if ($page == 'login') {
-            require 'tpl-login.php'; die();
+            require __DIR__ .'/templates/auth/login.php'; die();
         } else if ($page == 'register') {
-            require 'tpl-register.php'; die();
+            require __DIR__ .'/templates/auth/register.php'; die();
         } else if ($page == 'logout') {
             wp_logout();
             header('Location:'.$root); die();
@@ -64,14 +66,15 @@ function site_router() {
         // if (empty($curPerson->data['is_allowed']))
         //     \AccueilALaFerme\Flash::setFlashAndRedirect("Votre compte est en attente d'approbation. Vous ne pouvez pas accéder à la partie privée du site internet.", 'warning', 'login');
         if ($page == 'profil') {
-            require 'tpl-profil.php';
+            require __DIR__ .'/templates/profil.php';
         } else if ($page == 'famille') {
-            require 'tpl-famille.php';
-        } else if ($page == 'event_register') {
-            require 'tpl-event_register.php';
-        } else if ($page == 'event_guests') {
-            require 'tpl-event_guests.php';
-        }
+            require __DIR__ .'/templates/famille.php';
+        } else if ($page == 'event/register') {
+            require __DIR__ .'/templates/event/register.php';
+        } else if ($page == 'event/guests') {
+            require __DIR__ .'/templates/event/guests.php';
+        } else
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Page <em>$page</em> inconnue", 'warning', 'profil');
         die();
     }
 }
@@ -99,6 +102,15 @@ function add_last_nav_item($items) {
             <?php endif ?>
         </ul>
     </li>
+    <?php if (current_user_can('administrator') || is_admin()): ?>
+    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a href="<?= $blogUrl ?>/profil">Gestion</a>
+        <ul class="sub-menu">
+            <li id="evenements" class="menu-item menu-item-type-post_type menu-item-object-page evenements"><a href="<?= $blogUrl ?>/event/list"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Evénements</a></li>
+            <li id="familles" class="menu-item menu-item-type-post_type menu-item-object-page familles"><a href="<?= $blogUrl ?>/famille/list"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Familles</a></li>
+            <li id="personnes" class="menu-item menu-item-type-post_type menu-item-object-page personnes"><a href="<?= $blogUrl ?>/event/guests?event_id=2"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Personnes</a></li>
+        </ul>
+    </li>
+    <?php endif ?>
     <?php
     $out = ob_get_contents();
     ob_end_clean();
