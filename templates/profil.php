@@ -64,6 +64,9 @@ get_header();
                                     <th>Nom</th>
                                     <th>Option</th>
                                     <th>Participants</th>
+                                    <?php if (current_user_can('administrator')): ?>
+                                        <th>Admin</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,11 +76,16 @@ get_header();
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
                                         <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
-                                            <td>
-                                        <?php if (!empty($register[$event['pk']])): ?>
+                                        <td>
+                                            <?php if (!empty($register[$event['pk']])): ?>
                                                 <?= implode(', ', array_map(function($d){return '<span title="'.$d['firstname'].' '.$d['lastname']."\n arrivée: ".$d['arrival_date']."\n départ: ".$d['departure_date']."\n".'">'.$d['firstname'].'</span>';}, $register[$event['pk']])) ?>
-                                        <?php endif ?>
+                                            <?php endif ?>
+                                        </td>
+                                        <?php if (current_user_can('administrator')): ?>
+                                            <td>
+                                                <small><a href="<?= get_bloginfo('url').'/event/guests?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> invités</a></small>
                                             </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>

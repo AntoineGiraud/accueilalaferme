@@ -39,7 +39,7 @@ if (!empty($_POST)) {
                 'user_login' => $d['user_login'],
                 'user_password' => $d['user_pass']
             ]);
-            if ($_SESSION['url'][0] == "event/register") {
+            if (isset($_SESSION['url']) && $_SESSION['url'][0] == "event/register") {
                 unset($_SESSION['url']);
                 \AccueilALaFerme\Flash::setFlashAndRedirect("Avant de continuer vers l'enregistrement à l'événement, veuillez renseigner votre famille ou groupe.<br><em>Si vous êtes seul: vous pouvez <a href=\"".$root.implode('?', $_SESSION['url'])."\">continuer vers l'événement</a></em>", 'success', 'famille?'.$_SESSION['url'][1]);
             }
