@@ -25,7 +25,7 @@ function site_router() {
     global $root;
     $conf = require __DIR__ . '/conf.php';
     $root = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
-    $url = str_replace($root, '', $_SERVER['REQUEST_URI']);
+    $url = substr($_SERVER['REQUEST_URI'], strlen($root));
     $url = explode('?', $url, 2);
     $url_path = $url[0];
 
