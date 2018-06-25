@@ -20,6 +20,8 @@ if (empty($event_id) || empty($event))
     \AccueilALaFerme\Flash::setFlashAndRedirect("Evénement inconnu", 'warning', 'profil');
 else if (strtotime($event['end_date']) < time())
     \AccueilALaFerme\Flash::setFlashAndRedirect("Evénement terminé", 'warning', 'profil');
+$event['start_date'] = substr($event['start_date'], 0, 10);
+$event['end_date'] = substr($event['end_date'], 0, 10);
 
 // Reservation options
 $options = [];
@@ -36,6 +38,7 @@ foreach ($res as $row) {
 }
 
 // Récupérer les inscriptions présentes
+
 $personRegistrations = [];
 $res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.register_date, r.comment, pg.group_id, g.name group_name, g.is_family
                     FROM person p
@@ -47,6 +50,8 @@ $res = $DB->query("SELECT r.will_come, p.*, r.arrival_date, r.departure_date, r.
 foreach ($res as $row) {
     $row['arrival_date'] = substr($row['arrival_date'], 0, 10);
     $row['departure_date'] = substr($row['departure_date'], 0, 10);
+    $row['age'] = getAge($row['birthday'], $row['departure_date']);
+
     if (!isset($personRegistrations[$row['pk']]))
         $personRegistrations[$row['pk']] = $row;
     else // on désactive la plus vieille inscriptions car doublon !
@@ -58,13 +63,71 @@ get_header();
     do_action('sydney_before_content'); ?>
 
 	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
-		<main id="main" class="site-main hentry page" role="main" ng-controller="EventRegisterCtrl">
+		<main id="main" class="site-main hentry page" role="main" >
             <header class="entry-header">
                 <h1 class="title-post entry-title"><?= $event['name'] ?></h1>
-                <p>Du <?= substr($event['start_date'], 0, 10) ?> au <?= substr($event['end_date'], 0, 10) ?></p>
+                <p>Du <?= $event['start_date'] ?> au <?= $event['end_date'] ?></p>
             </header>
             <div>
                 <h4>Participants à l'événement <small><?= count($personRegistrations) ?></small></h4>
+                <div class="row form-group">
+                    <h5>Filtre sur l'âge :</h5>
+                    <div class="form-group">
+                        <div class="col-sm-4 row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-2 control-label text-nowrap" for="age_debut">Borne inférieure Âge</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input id="age_debut" type="number" ng-model="age_debut" name="age_debut" ng-init="age_debut=''">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-2 control-label text-nowrap" for="age_fin">Borne supérieure Âge</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input id="age_fin" type="number" ng-model="age_fin" name="age_fin" ng-init="age_fin=''">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h5>Filtre sur les dates :</h5>
+                    <div class="form-group">
+                        <div class="col-sm-3 row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-2 control-label text-nowrap" for="arrivee">Arrivée le</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="arrivee" id="arrivee" type="date" ng-model="arrivee" name="arrivee" ng-init="arrivee=''">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-2 control-label text-nowrap" for="depart">Départ le</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="depart" id="depart" type="date" ng-model="depart" name="depart" ng-init="depart=''">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-2 control-label text-nowrap" for="present">Présent le</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="present" id="present" type="date" ng-model="present" name="present" ng-init="present=''">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <tr>
@@ -86,12 +149,31 @@ get_header();
                     <tbody>
                         <tr>
                             <?php foreach ($personRegistrations as $person):?>
-                                <tr>
+                                <tr ng-show="
+                                (
+                                (!age_debut && !age_fin)
+                                || (!age_debut && age_fin >= <?= $person['age']*1 ?>)
+                                || (!age_fin && age_debut <= <?= $person['age']*1 ?>)
+                                || (age_debut <= <?= $person['age']*1 ?> && age_fin >= <?= $person['age']*1 ?>)
+                                )
+                                &&
+                                (
+                                (!arrivee && !depart)
+                                || (!arrivee && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
+                                || (!depart && 1*arrivee == 1*getDate('<?=$person['arrival_date']?>'))
+                                || (1*arrivee == 1*getDate('<?=$person['arrival_date']?>') && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
+                                )
+                                &&
+                                (
+                                !present ||
+                                (1*present >= 1*getDate('<?=$person['arrival_date']?>') && 1*present <= 1*getDate('<?=$person['departure_date']?>'))
+                                )
+                                ">
                                     <td class="<?= $person['will_come'] == 1 ? 'success' : ($person['will_come']===null ? 'warning':'danger') ?>"><?= $person['will_come'] ?></td>
                                     <td><?= $person['email'] ?></td>
                                     <td><?= stripslashes($person['firstname']) ?></td>
                                     <td><?= stripslashes($person['lastname']) ?></td>
-                                    <td><?= $person['birthday'] ?></td>
+                                    <td><?= $person['birthday'] . ' (' . $person['age'] . ') '; ?></td>
                                     <td><?= $person['phone'] ?></td>
                                     <td><?= empty($person['comment']) ? '' : implode(" ; ", json_decode($person['comment'], true)) ?></td>
                                     <td><?= $person['arrival_date'] ?></td>
@@ -108,5 +190,12 @@ get_header();
             </div>
 		</main><!-- #main -->
 	</div><!-- #primary -->
-    <?php do_action('sydney_after_content'); ?>
+    <?php
+      global $js_for_layout;
+      $js_for_layout = [
+        'angularjs',
+        'angularjs_accueilalaferme/app.js',
+        'angularjs_accueilalaferme/controllers/PageCtrl.js',
+      ];
+    do_action('sydney_after_content'); ?>
 <?php get_footer(); ?>

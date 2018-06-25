@@ -9,10 +9,11 @@
 // Fonctions Accueil à la ferme //
 //////////////////////////////////
 
-function getAge($anniversaire) {
+function getAge($anniversaire, $comparison_date=null) {
+    date_default_timezone_set('America/Toronto');
     $date = new DateTime($anniversaire);
-    $now = new DateTime();
-    $interval = $now->diff($date);
+    $comparison_date = isset($comparison_date) ? new Datetime($comparison_date) : new Datetime();
+    $interval = $comparison_date->diff($date);
     return $interval->y;
 }
 

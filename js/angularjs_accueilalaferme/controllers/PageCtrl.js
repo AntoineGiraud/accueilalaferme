@@ -3,6 +3,8 @@ app.controller('PageCtrl', function($scope, $timeout, $window, $rootScope, $inte
     ////////////////////////////////
     // Variables & Initialisation //
     ////////////////////////////////
+    $scope.getDate = function(d){d = new Date(d); d.setHours(0,0,0);return d;};
+
     $scope.loader = true;
     $scope.errorLoading = false;
     $scope.errorMessage = "Chargement ...";
