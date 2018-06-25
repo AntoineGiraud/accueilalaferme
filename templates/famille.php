@@ -15,7 +15,9 @@ else if (!empty($curPerson->groups))
 else
     $group_id = null;
 if ($group_id) {
-    if (in_array($group_id, $curPerson->canManageGroupIds))
+    if(is_admin() || current_user_can('administrator'))
+        $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
+    elseif (in_array($group_id, $curPerson->canManageGroupIds))
         $curGroup = new \AccueilALaFerme\Group($group_id, $DB);
     else if (isset($curPerson->groups[$group_id]))
         \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits d'édition de votre groupe.", 'warning', 'profil');

@@ -15,6 +15,12 @@ if (empty($event_id) || empty($event))
     \AccueilALaFerme\Flash::setFlashAndRedirect("Evénement inconnu", 'warning', 'profil');
 else if (strtotime($event['end_date']) < time())
     \AccueilALaFerme\Flash::setFlashAndRedirect("Evénement terminé", 'warning', 'profil');
+if(empty($_GET['user_id']))
+    global $curPerson;
+elseif(current_user_can('administrator') || is_admin())
+    $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+else
+    \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
 
 $group_id = !empty($curPerson->groups) ? current(array_keys($curPerson->groups)) : null;
 $curGroup = ($group_id && in_array($group_id, $curPerson->canManageGroupIds)) ? new \AccueilALaFerme\Group($group_id, $DB) : null;
@@ -148,7 +154,7 @@ get_header();
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk'].'&group_id='.$group_id ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>

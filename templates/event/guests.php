@@ -5,6 +5,7 @@
  * @package accueilalaferme
  */
 global $curPerson;
+$blogUrl = get_bloginfo('url');
 
 if (!is_admin() && !current_user_can('administrator'))
     \AccueilALaFerme\Flash::setFlashAndRedirect("Espace réservé à l'administration", 'warning', 'profil');
@@ -77,13 +78,14 @@ get_header();
                             <th>arrivée</th>
                             <th>départ</th>
                             <th>enregistrement</th>
-                            <th>groupe</th>
+                            <th>groupe/famille</th>
                             <th>nom groupe</th>
+                            <th>éditer</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <?php foreach ($personRegistrations as $person): ?>
+                            <?php foreach ($personRegistrations as $person):?>
                                 <tr>
                                     <td class="<?= $person['will_come'] == 1 ? 'success' : ($person['will_come']===null ? 'warning':'danger') ?>"><?= $person['will_come'] ?></td>
                                     <td><?= $person['email'] ?></td>
@@ -95,8 +97,9 @@ get_header();
                                     <td><?= $person['arrival_date'] ?></td>
                                     <td><?= $person['departure_date'] ?></td>
                                     <td><?= $person['register_date'] ?></td>
-                                    <td><?= ($person['is_family'] ? 'famille' : 'groupe').' <code>'.$person['group_id'].'</code>' ?></td>
+                                    <td><?= $person['is_family'] === null ? 'Individuel' : ($person['is_family'] ==1 ? 'famille' : 'groupe' ).' <code>'.$person['group_id'].'</code>' ?></td>
                                     <td><?= stripslashes($person['group_name']) ?></td>
+                                    <td><a type="button" href="<?= $blogUrl ?>/event/register?event_id=2&user_id=<?=$person['pk']?>" class="glyphicon glyphicon-edit"></a></td>
                                 </tr>
                             <?php endforeach ?>
                         </tr>
