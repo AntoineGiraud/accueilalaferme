@@ -170,7 +170,7 @@ class Group {
                 if (empty($row['lastname']))
                     $error['lastname'] = 'champ vide';
                 else $row['lastname'] = ucfirst($row['lastname']);
-                if (empty($row['birthday']) && in_array($row['link'], ['fils', 'fille', 'friend_boy', 'friend_girl']))
+                if (empty($row['birthday']) && in_array($row['link']??'', ['fils', 'fille', 'friend_boy', 'friend_girl']))
                     $error['birthday'] = 'age enfant vide';
                 else if (!empty($row['birthday']) && !preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $row['birthday']))
                     $error['birthday'] = "mauvais format date d'anniversaire";

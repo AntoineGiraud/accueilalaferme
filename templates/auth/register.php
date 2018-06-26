@@ -103,7 +103,7 @@ get_header();
                                   <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
-                                  <input type="date" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" maxlength="10" name="birthday" id="birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                  <input type="date" value="<?= !empty($d['birthday'])?$d['birthday']:'' ?>" maxlength="10" name="birthday" id="birthday" class="form-control" uib-datepicker-popup is-open="bd_cal_open" datepicker-options="dateOptions" end-date="2018-06-05" close-text="Close" placeholder="yyyy-mm-dd"/>
                                 </p>
                             </div>
                         </div>

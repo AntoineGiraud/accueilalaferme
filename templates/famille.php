@@ -152,7 +152,7 @@ get_header();
                                 <tr ng-repeat="member in group.persons track by $index" ng-class="{'success':member.pk==<?= $curPerson->data['pk'] ?>}">
                                     <td ng-class="{'success':'pere' == member.link || 'mere' == member.link || 'fils' == member.link || 'fille' == member.link, 'warning':'pere' != member.link && 'mere' != member.link && 'fils' != member.link && 'fille' != member.link}">
                                         <input type="hidden" name="persons[{{$index}}][pk]" value="{{member.pk}}">
-                                        <select class="form-control" nam nge="persons[{{$index}}][link]" ng-model="member.link">
+                                        <select class="form-control" name="persons[{{$index}}][link]" ng-model="member.link">
                                             <optgroup label="Parents">
                                               <option value="pere">Père</option>
                                               <option value="mere">Mère</option>
@@ -186,7 +186,7 @@ get_header();
                                           <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="bd_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                           </span>
-                                          <input type="text" maxlength="10" ng-focus="bd_cal_open=true;" name="persons[{{$index}}][birthday]" ng-model="member.birthday" class="form-control" uib-datepicker-popup ng-model="dt" is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd"/>
+                                          <input type="text" maxlength="10" ng-focus="bd_cal_open=true;" name="persons[{{$index}}][birthday]" ng-model="member.birthday" class="form-control" uib-datepicker-popup is-open="bd_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" />
                                         </p>
                                     </td>
                                     <td>

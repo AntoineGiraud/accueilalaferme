@@ -175,7 +175,7 @@ get_header();
                                           <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="arr_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                           </span>
-                                          <input type="text" maxlength="10" ng-focus="arr_cal_open=true;" name="persons[{{$index}}][arrival_date]" ng-model="member.arrival_date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="arr_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
+                                          <input type="text" maxlength="10" ng-focus="arr_cal_open=true;" name="persons[{{$index}}][arrival_date]" ng-model="member.arrival_date" class="form-control" uib-datepicker-popup is-open="arr_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
                                         </p>
                                     </td>
                                     <td ng-class="{'has-error':member.errors.departure_date}">
@@ -183,7 +183,7 @@ get_header();
                                           <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="dep_cal_open=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                           </span>
-                                          <input type="text" maxlength="10" ng-focus="dep_cal_open=true;" name="persons[{{$index}}][departure_date]" ng-model="member.departure_date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="dep_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
+                                          <input type="text" maxlength="10" ng-focus="dep_cal_open=true;" name="persons[{{$index}}][departure_date]" ng-model="member.departure_date" class="form-control" uib-datepicker-popup is-open="dep_cal_open" datepicker-options="dateOptions" close-text="Close" placeholder="yyyy-mm-dd" ng-disabled="!member.will_come"/>
                                         </p>
                                     </td>
                                     <td><label>

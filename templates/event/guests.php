@@ -69,59 +69,49 @@ get_header();
             </header>
             <div>
                 <h4>Participants à l'événement <small>{{count}}/<?= count($personRegistrations) ?></small></h4>
-                <div class="row form-group">
-                    <h5>Filtre sur l'âge :</h5>
-                    <div class="form-group">
-                        <div class="col-sm-4 row">
-                            <div class="col-sm-5">
-                                <label class="col-sm-2 control-label text-nowrap" for="age_debut">Borne inférieure Âge</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input id="age_debut" type="number" ng-model="filter.age_debut" name="age_debut">
-                            </div>
+                <h5>Filtre sur l'âge :</h5>
+                <div class="row">
+                    <div class="col-sm-4 row">
+                        <div class="col-sm-5">
+                            <label class="col-sm-2 control-label text-nowrap" for="age_debut">Borne inférieure Âge</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="age_debut" type="number" ng-model="filter.age_debut" name="age_debut">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-4 row">
-                            <div class="col-sm-5">
-                                <label class="col-sm-2 control-label text-nowrap" for="age_fin">Borne supérieure Âge</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input id="age_fin" type="number" ng-model="filter.age_fin" name="age_fin">
-                            </div>
+                    <div class="col-sm-4 row">
+                        <div class="col-sm-5">
+                            <label class="col-sm-2 control-label text-nowrap" for="age_fin">Borne supérieure Âge</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input id="age_fin" type="number" ng-model="filter.age_fin" name="age_fin">
                         </div>
                     </div>
                 </div>
+                <h5>Filtre sur les dates :</h5>
                 <div class="row">
-                    <h5>Filtre sur les dates :</h5>
-                    <div class="form-group">
-                        <div class="col-sm-3 row">
-                            <div class="col-sm-5">
-                                <label class="col-sm-2 control-label text-nowrap" for="arrivee">Arrivée le</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.arrivee" id="arrivee" type="date" name="arrivee">
-                            </div>
+                    <div class="col-sm-3 row">
+                        <div class="col-sm-5">
+                            <label class="col-sm-2 control-label text-nowrap" for="arrivee">Arrivée le</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="date" min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.arrivee" id="arrivee" name="arrivee">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 row">
-                            <div class="col-sm-5">
-                                <label class="col-sm-2 control-label text-nowrap" for="depart">Départ le</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.depart" id="depart" type="date" name="depart">
-                            </div>
+                    <div class="col-sm-3 row">
+                        <div class="col-sm-5">
+                            <label class="col-sm-2 control-label text-nowrap" for="depart">Départ le</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="date" min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.depart" id="depart" name="depart">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 row">
-                            <div class="col-sm-5">
-                                <label class="col-sm-2 control-label text-nowrap" for="present">Présent le</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.present" id="present" type="date" ng-model="filter.present" name="present">
-                            </div>
+                    <div class="col-sm-3 row">
+                        <div class="col-sm-5">
+                            <label class="col-sm-2 control-label text-nowrap" for="present">Présent le</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="date" min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.present" id="present" name="present">
                         </div>
                     </div>
                 </div>

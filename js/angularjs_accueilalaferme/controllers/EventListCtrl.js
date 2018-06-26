@@ -1,7 +1,7 @@
 app.controller('EventListCtrl', function($scope){
     function getDate(d) {
-        d = new Date(d);
-        d.setHours(0,0,0);
+        explode = d.split('-');
+        d = new Date(explode[0], explode[1]-1, explode[2]);
         return d;
     };
     $scope.persons = persons;
@@ -20,8 +20,10 @@ app.controller('EventListCtrl', function($scope){
         age_fin: ''
     };
     $scope.$watch('filter', function(newVals, oldVals) {
+        console.log('$scope.filter', $scope.filter);
         $scope.count=0;
         for (k in $scope.persons) {
+            // console.log('person', $scope.persons[k]);
             show = showPerson($scope.persons[k]);
             if (show) $scope.count++;
             $scope.persons[k].show = show;
@@ -29,6 +31,7 @@ app.controller('EventListCtrl', function($scope){
     }, true);
     function showPerson(person){
         f = $scope.filter;
+        console.log(f.present, person.arrival_date_time, person.departure_date_time, person);
         return (
             (!f.age_debut && !f.age_fin)
             || (!f.age_debut && f.age_fin >= person['age']*1)
