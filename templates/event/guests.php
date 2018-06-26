@@ -58,18 +58,17 @@ foreach ($res as $row) {
         $DB->query('UPDATE registration SET will_come = 0 WHERE pk = '.$row['pk']);
 }
 
-
 get_header();
     do_action('sydney_before_content'); ?>
 
 	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
-		<main id="main" class="site-main hentry page" role="main" >
+		<main ng-controller="EventListCtrl" id="main" class="site-main hentry page" role="main" >
             <header class="entry-header">
                 <h1 class="title-post entry-title"><?= $event['name'] ?></h1>
                 <p>Du <?= $event['start_date'] ?> au <?= $event['end_date'] ?></p>
             </header>
             <div>
-                <h4>Participants à l'événement <small><?= count($personRegistrations) ?></small></h4>
+                <h4>Participants à l'événement <small>{{count}}/<?= count($personRegistrations) ?></small></h4>
                 <div class="row form-group">
                     <h5>Filtre sur l'âge :</h5>
                     <div class="form-group">
@@ -78,7 +77,7 @@ get_header();
                                 <label class="col-sm-2 control-label text-nowrap" for="age_debut">Borne inférieure Âge</label>
                             </div>
                             <div class="col-sm-4">
-                                <input id="age_debut" type="number" ng-model="age_debut" name="age_debut" ng-init="age_debut=''">
+                                <input id="age_debut" type="number" ng-model="filter.age_debut" name="age_debut">
                             </div>
                         </div>
                     </div>
@@ -88,7 +87,7 @@ get_header();
                                 <label class="col-sm-2 control-label text-nowrap" for="age_fin">Borne supérieure Âge</label>
                             </div>
                             <div class="col-sm-4">
-                                <input id="age_fin" type="number" ng-model="age_fin" name="age_fin" ng-init="age_fin=''">
+                                <input id="age_fin" type="number" ng-model="filter.age_fin" name="age_fin">
                             </div>
                         </div>
                     </div>
@@ -101,7 +100,7 @@ get_header();
                                 <label class="col-sm-2 control-label text-nowrap" for="arrivee">Arrivée le</label>
                             </div>
                             <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="arrivee" id="arrivee" type="date" ng-model="arrivee" name="arrivee" ng-init="arrivee=''">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.arrivee" id="arrivee" type="date" name="arrivee">
                             </div>
                         </div>
                     </div>
@@ -111,7 +110,7 @@ get_header();
                                 <label class="col-sm-2 control-label text-nowrap" for="depart">Départ le</label>
                             </div>
                             <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="depart" id="depart" type="date" ng-model="depart" name="depart" ng-init="depart=''">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.depart" id="depart" type="date" name="depart">
                             </div>
                         </div>
                     </div>
@@ -121,7 +120,7 @@ get_header();
                                 <label class="col-sm-2 control-label text-nowrap" for="present">Présent le</label>
                             </div>
                             <div class="col-sm-4">
-                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="present" id="present" type="date" ng-model="present" name="present" ng-init="present=''">
+                                <input min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.present" id="present" type="date" ng-model="filter.present" name="present">
                             </div>
                         </div>
                     </div>
@@ -131,7 +130,6 @@ get_header();
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <tr>
-                            <th>will come</th>
                             <th>mail</th>
                             <th>prénom</th>
                             <th>nom</th>
@@ -146,44 +144,20 @@ get_header();
                             <th>éditer</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <?php foreach ($personRegistrations as $person):?>
-                                <tr ng-show="
-                                (
-                                (!age_debut && !age_fin)
-                                || (!age_debut && age_fin >= <?= $person['age']*1 ?>)
-                                || (!age_fin && age_debut <= <?= $person['age']*1 ?>)
-                                || (age_debut <= <?= $person['age']*1 ?> && age_fin >= <?= $person['age']*1 ?>)
-                                )
-                                &&
-                                (
-                                (!arrivee && !depart)
-                                || (!arrivee && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
-                                || (!depart && 1*arrivee == 1*getDate('<?=$person['arrival_date']?>'))
-                                || (1*arrivee == 1*getDate('<?=$person['arrival_date']?>') && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
-                                )
-                                &&
-                                (
-                                !present ||
-                                (1*present >= 1*getDate('<?=$person['arrival_date']?>') && 1*present <= 1*getDate('<?=$person['departure_date']?>'))
-                                )
-                                ">
-                                    <td class="<?= $person['will_come'] == 1 ? 'success' : ($person['will_come']===null ? 'warning':'danger') ?>"><?= $person['will_come'] ?></td>
-                                    <td><?= $person['email'] ?></td>
-                                    <td><?= stripslashes($person['firstname']) ?></td>
-                                    <td><?= stripslashes($person['lastname']) ?></td>
-                                    <td><?= $person['birthday'] . ' (' . $person['age'] . ') '; ?></td>
-                                    <td><?= $person['phone'] ?></td>
-                                    <td><?= empty($person['comment']) ? '' : implode(" ; ", json_decode($person['comment'], true)) ?></td>
-                                    <td><?= $person['arrival_date'] ?></td>
-                                    <td><?= $person['departure_date'] ?></td>
-                                    <td><?= $person['register_date'] ?></td>
-                                    <td><?= $person['is_family'] === null ? 'Individuel' : ($person['is_family'] ==1 ? 'famille' : 'groupe' ).' <code>'.$person['group_id'].'</code>' ?></td>
-                                    <td><?= stripslashes($person['group_name']) ?></td>
-                                    <td><a type="button" href="<?= $blogUrl ?>/event/register?event_id=2&user_id=<?=$person['pk']?>" class="glyphicon glyphicon-edit"></a></td>
-                                </tr>
-                            <?php endforeach ?>
+                    <tbody ng-init="show={show:true}">
+                        <tr ng-repeat="person in persons | filter:show">
+                            <td>{{ person['email'] }}</td>
+                            <td>{{ person['firstname'] }}</td>
+                            <td>{{ person['lastname'] }}</td>
+                            <td>{{ person['birthday']}} <em>({{person['age']}})</em></td>
+                            <td>{{ person['phone'] }}</td>
+                            <td>{{ person['comment'] }}</td>
+                            <td>{{ person['arrival_date'] }}</td>
+                            <td>{{ person['departure_date'] }}</td>
+                            <td>{{ person['register_date'] }}</td>
+                            <td>{{ person['is_family'] }} <code>{{ person['group_id'] }} </code></td>
+                            <td>{{ person['group_name'] }}</td>
+                            <td><a type="button" href="<?= $blogUrl ?>/event/register?event_id=2&user_id={{person['pk']}}" class="glyphicon glyphicon-edit"></a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -193,9 +167,18 @@ get_header();
     <?php
       global $js_for_layout;
       $js_for_layout = [
+        'var persons = ' . json_encode(array_values(array_map(function($d){
+            foreach (['firstname','lastname','group_name'] as $field)
+                $d[$field] = stripslashes($d[$field]);
+            $d['comment'] = empty($d['comment']) ? '' : stripslashes(implode(" ; ", json_decode($d['comment'], true)));
+            $d['is_family'] = $d['is_family'] === null ? 'Individuel' : ($d['is_family'] ==1 ? 'famille' : 'groupe');
+            $d['show']=true;
+            return $d;
+        }, $personRegistrations))) . ';',
         'angularjs',
         'angularjs_accueilalaferme/app.js',
         'angularjs_accueilalaferme/controllers/PageCtrl.js',
+        'angularjs_accueilalaferme/controllers/EventListCtrl.js'
       ];
     do_action('sydney_after_content'); ?>
 <?php get_footer(); ?>
