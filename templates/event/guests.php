@@ -111,7 +111,7 @@ get_header();
                             <label class="col-sm-2 control-label text-nowrap" for="present">Présent le</label>
                         </div>
                         <div class="col-sm-4">
-                            <input type="date" min="<?=$event['start_date']?>" max="<?=$event['end_date']?>" ng-model="filter.present" id="present" name="present">
+                            <input type="date" ng-model="filter.present" id="present" name="present">
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ get_header();
                             <td>{{ person['register_date'] }}</td>
                             <td>{{ person['is_family'] }} <code>{{ person['group_id'] }} </code></td>
                             <td>{{ person['group_name'] }}</td>
-                            <td><a type="button" href="<?= $blogUrl ?>/event/register?event_id=2&user_id={{person['pk']}}" class="glyphicon glyphicon-edit"></a></td>
+                            <td><a type="button" href="<?= $blogUrl ?>/event/register?event_id=<?=$event_id?>&user_id={{person['pk']}}" class="glyphicon glyphicon-edit"></a></td>
                         </tr>
                     </tbody>
                 </table>

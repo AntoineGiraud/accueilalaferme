@@ -31,7 +31,7 @@ app.controller('EventListCtrl', function($scope){
     }, true);
     function showPerson(person){
         f = $scope.filter;
-        console.log(f.present, person.arrival_date_time, person.departure_date_time, person);
+
         return (
             (!f.age_debut && !f.age_fin)
             || (!f.age_debut && f.age_fin >= person['age']*1)
@@ -46,25 +46,5 @@ app.controller('EventListCtrl', function($scope){
             !f.present ||
             (1*f.present >= 1*person.arrival_date_time && 1*f.present <= 1*person.departure_date_time)
         );
-
-// (!age_debut && !age_fin)
-// || (!age_debut && age_fin >= <?= $person['age']*1 ?>)
-// || (!age_fin && age_debut <= <?= $person['age']*1 ?>)
-// || (age_debut <= <?= $person['age']*1 ?> && age_fin >= <?= $person['age']*1 ?>)
-// )
-// &&
-// (
-// (!arrivee && !depart)
-// || (!arrivee && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
-// || (!depart && 1*arrivee == 1*getDate('<?=$person['arrival_date']?>'))
-// || (1*arrivee == 1*getDate('<?=$person['arrival_date']?>') && 1*depart == 1*getDate('<?=$person['departure_date']?>'))
-// )
-// &&
-// (
-// !present ||
-// (1*present >= 1*getDate('<?=$person['arrival_date']?>') && 1*present <= 1*getDate('<?=$person['departure_date']?>'))
-// )
-
-
     }
 });
