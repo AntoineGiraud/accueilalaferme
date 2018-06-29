@@ -6,10 +6,13 @@
  */
 global $curPerson;
 
+$editSomeoneElse = false;
 if(!empty($_GET['user_id'])) {
     if(is_admin() || current_user_can('administrator'))
-        if($_GET['user_id'] != $curPerson->data['pk'])
+        if($_GET['user_id'] != $curPerson->data['pk']) {
+            $editSomeoneElse = true;
             $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+        }
 }
 if (!empty($_GET['group_id']))
     $group_id = $_GET['group_id']*1;
@@ -87,6 +90,7 @@ if (!empty($_POST)) {
     }
 }
 
+$editSomeoneElse = !isset($curGroup->persons[$curPerson->data['pk']]);
 
 get_header();
     do_action('sydney_before_content'); ?>
@@ -94,7 +98,7 @@ get_header();
 	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
 		<main id="main" class="site-main hentry page" role="main" ng-controller="FamilyCtrl">
             <header class="entry-header">
-                <h1 class="title-post entry-title">{{{'1':'Ma famille', '0':'Mon groupe'}[group.prop.is_family]}}</h1>
+                <h1 class="title-post entry-title"><?= empty($editSomeoneElse) ? "{{{'1':'Ma famille', '0':'Mon groupe'}[group.prop.is_family]}}" : '<span class="text-warning">Editer '.($curGroup->is_family?'Famille':'Groupe').' '.$curGroup->prop['name'].'</span>' ?></h1>
             </header>
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>

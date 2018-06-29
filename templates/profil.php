@@ -9,8 +9,10 @@ $can_admin = is_admin() || current_user_can('administrator');
 
 if(isset($_GET['user_id']))
     if($can_admin) {
-        if($_GET['user_id'] != $curPerson->data['pk'])
+        if($_GET['user_id'] != $curPerson->data['pk']) {
+            $editSomeoneElse = true;
             $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+        }
     }
     else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
@@ -52,17 +54,17 @@ get_header();
 	<div id="primary" class="content-area fullwidth">
 		<main id="main" class="site-main hentry page" role="main">
             <header class="entry-header">
-                <h1 class="title-post entry-title">Mes informations</h1>
+                <h1 class="title-post entry-title"><?= empty($editSomeoneElse) ? "Mes informations" : '<span class="text-warning">Editer profil '.$curPerson->data['firstname'].' '.$curPerson->data['lastname'].'</span>' ?></h1>
             </header>
                 <?php if (!empty($error_msg)): ?>
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
-
-				<div class="page-content">
-                    <h4>Bienvenue <?= $curPerson->data['firstname'] ?> !</h4>
-                    <p>Vous retrouverez ici votre profil vous permettant de gérer votre famille/compte et de vous inscrire aux évènements de la ferme.</p>
-				</div><!-- .page-content -->
-
+                <?php if (empty($editSomeoneElse)): ?>
+                    <div class="page-content">
+                        <h4>Bienvenue <?= $curPerson->data['firstname'] ?> !</h4>
+                        <p>Vous retrouverez ici votre profil vous permettant de gérer votre famille/compte et de vous inscrire aux évènements de la ferme.</p>
+                    </div><!-- .page-content -->
+                <?php endif ?>
                 <div class="row">
                     <div class="col-sm-7">
                         <h4>Prochains événements</h4>
@@ -93,8 +95,8 @@ get_header();
                                         </td>
                                         <?php if (current_user_can('administrator')): ?>
                                             <td>
-                                                <small><a href="<?= get_bloginfo('url').'/event/guests?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> invités</a></small>
-                                                <small><a href="<?= get_bloginfo('url').'/user_list?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> utilisateurs sans place</a></small>
+                                                <small><a href="<?= get_bloginfo('url').'/event/guests?event_id='.$event['pk'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-list"></span> participants</a></small>
+                                                <small><a href="<?= get_bloginfo('url').'/user_list?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs" title="Utilisateurs non inscrits"><span class="glyphicon glyphicon-list"></span> non inscrits</a></small>
                                             </td>
                                         <?php endif; ?>
                                     </tr>
@@ -104,13 +106,13 @@ get_header();
                     </div>
                     <div class="col-sm-5">
                         <?php if (empty($curGroup)): ?>
-                            <h4>Ma famille / mon groupe</h4>
+                            <h4><?= empty($editSomeoneElse) ? 'Ma famille / mon groupe' : 'Famille / groupe'  ?></h4>
                             <p>
                                 Remplissez votre famille ou groupe afin de faciliter l'inscriptions aux événements ou l'accès à nos nouvelles.
                             </p>
                             <p><a href="<?= get_bloginfo('url').'/famille' ?><?= (isset($_GET['user_id']) && ($can_admin)) ? '?user_id=' . $_GET['user_id'] : "" ?>" class="btn btn-primary">C'est parti !</a></p>
                         <?php else: ?>
-                            <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?><?=($can_admin && isset($_GET['user_id'])) ? "?group_id=" . $group_id : "" ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
+                            <h4><?= empty($editSomeoneElse) ? 'Ma famille / mon groupe' : 'Famille / groupe' ?> <a href="<?= get_bloginfo('url').'/famille' ?><?=($can_admin && isset($_GET['user_id'])) ? "?group_id=" . $group_id : "" ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span> Editer</a></h4>
                             <table class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>

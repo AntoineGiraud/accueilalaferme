@@ -21,14 +21,16 @@ else if (strtotime($event['end_date']) < time())
 if(empty($_GET['user_id']))
     global $curPerson;
 elseif($can_admin) {
-    if($_GET['user_id'] != $curPerson->data['pk'])
+    if($_GET['user_id'] != $curPerson->data['pk']) {
+        $editSomeoneElse = true;
         $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+    }
 }
 else
     \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
 
 $group_id = !empty($curPerson->groups) ? current(array_keys($curPerson->groups)) : null;
-$curGroup = ($group_id && in_array($group_id, $curPerson->canManageGroupIds)) ? new \AccueilALaFerme\Group($group_id, $DB) : null;
+$curGroup = ($group_id && (in_array($group_id, $curPerson->canManageGroupIds) || $can_admin)) ? new \AccueilALaFerme\Group($group_id, $DB) : null;
 $persons = $curGroup ? array_values($curGroup->persons) : [$curPerson->data];
 $person_ids = array_map(function($v){ return $v['pk']; }, $persons);
 
@@ -158,10 +160,10 @@ get_header();
                     <p class="alert alert-danger"><?= $error_msg ?></p>
                 <?php endif ?>
                 <p class="alert alert-warning">N.B. : Pour les familles n’ayant jamais vécu un des événements à la ferme, nous vous demandons de prendre contact personnellement avec nous avant de vous inscrire... (418)289-3705 Merci.</p>
-
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk']?><?=$url_extension ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk']?><?=$url_extension ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small> <?= empty($editSomeoneElse) ? "" : '<span class="text-warning">Inscriptions en tant que '.$curPerson->data['firstname'].' '.$curPerson->data['lastname'].'</span>' ?></legend>
+
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>

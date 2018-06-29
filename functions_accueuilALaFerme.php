@@ -110,9 +110,10 @@ function add_last_nav_item($items) {
         <ul class="sub-menu">
             <li id="evenements" class="menu-item menu-item-type-post_type menu-item-object-page evenements"><a href="<?= $blogUrl ?>/event/list"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Evénements</a></li>
             <li id="familles" class="menu-item menu-item-type-post_type menu-item-object-page familles"><a href="<?= $blogUrl ?>/famille/list"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Familles</a></li>
-            <li id="personnes" class="menu-item menu-item-type-post_type menu-item-object-page personnes"><a href="<?= $blogUrl ?>/event/guests?event_id=2"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Personnes</a></li>
+            <li id="personnes" class="menu-item menu-item-type-post_type menu-item-object-page personnes"><a href="<?= $blogUrl ?>/event/guests?event_id=4"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Personnes</a></li>
             <li id="utilisateurs" class="menu-item menu-item-type-post_type menu-item-object-page utilisateurs"><a href="<?= $blogUrl ?>/user_list"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Utilisateurs</a></li>
-            <li id="utilisateurs" class="menu-item menu-item-type-post_type menu-item-object-page utilisateurs"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Ajouter un utilisateur</a></li>
+            <li id="utilisateurs" class="menu-item menu-item-type-post_type menu-item-object-page utilisateurs"><a href="<?= $blogUrl ?>/register"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp; Ajout utilisateur</a></li>
+            <li id="utilisateurs" class="menu-item menu-item-type-post_type menu-item-object-page utilisateurs"><a href="<?= $blogUrl ?>/wp-admin"><span class="glyphicon glyphicon-king"></span>&nbsp;&nbsp; Admin Wordpress</a></li>
         </ul>
     </li>
     <?php endif ?>
