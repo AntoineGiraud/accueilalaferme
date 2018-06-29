@@ -129,9 +129,15 @@ if (!empty($_POST)) {
             }
         }
         if ($maj)
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil');
+            if(is_admin() || current_user_can('administrator'))
+                \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil?user_id='.$_POST['persons']['0']['pk']);
+            else
+                \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil');
         else
-            \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
+            if(is_admin() || current_user_can('administrator'))
+                \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil?user_id='.$_POST['persons']['0']['pk']);
+            else
+                \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
     } else
         $error_msg = implode('<br>', array_keys($error_msg));
 }
