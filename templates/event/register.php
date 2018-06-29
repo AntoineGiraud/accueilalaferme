@@ -5,7 +5,7 @@
  * @package accueilalaferme
  */
 $can_admin = current_user_can('administrator') || is_admin();
-$url_extension = ($can_admin && isset($_GET['user_id'])) ? (isset($group_id)) ? ("&group_id=" . $group_id) : ("&user_id=" . $curPerson->data['pk']) : "";
+$url_extension = ($can_admin && isset($_GET['user_id'])) ? (isset($group_id) ? ("&group_id=" . $group_id) : ("&user_id=" . $_GET['user_id'])) : "";
 
 global $curPerson;
 if (!empty($_GET['event_id']))
