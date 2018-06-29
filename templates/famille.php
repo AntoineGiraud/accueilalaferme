@@ -6,10 +6,13 @@
  */
 global $curPerson;
 
+if(!empty($_GET['user_id'])) {
+    if(is_admin() || current_user_can('administrator'))
+        if($_GET['user_id'] != $curPerson->data['pk'])
+            $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+}
 if (!empty($_GET['group_id']))
     $group_id = $_GET['group_id']*1;
-else if (!empty($_POST['group_id']))
-    $group_id = $_POST['group_id']*1;
 else if (!empty($curPerson->groups))
     $group_id = current(array_keys($curPerson->groups));
 else
@@ -28,30 +31,51 @@ if ($group_id) {
 
 
 if (!empty($_POST)) {
+    if (!empty($_POST['group_id']))
+        $group_id = $_POST['group_id']*1;
     try {
         $curGroup->saveGroup($_POST);
         // Porter vers wordpress les MAJ dans les personnes
-        if (isset($curGroup->persons[$curPerson->data['pk']])) {
-            $majCurUser = $curGroup->persons[$curPerson->data['pk']];
-            $update = [];
-            $userWP = wp_get_current_user();
-            if ($userWP->user_email != $majCurUser['email'])
-                $update['user_email'] = $majCurUser['email'];
-            if ($userWP->first_name != $majCurUser['firstname'])
-                $update['first_name'] = $majCurUser['firstname'];
-            if ($userWP->last_name != $majCurUser['lastname'])
-                $update['last_name'] = $majCurUser['lastname'];
-            if (!empty($update)) {
-                $update['ID'] = $userWP->ID;
-                $res = wp_update_user( $update );
-                if ( is_wp_error( $res ) ) { // rollback
-                    $error_msg = $res->get_error_message();
-                    $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
-                    header('Location:'.$root.'family');die();
+        if( (!is_admin() && !current_user_can('administrator')) || (!isset($_GET['user_id']) && !isset($_GET['group_id'])) )
+            if (isset($curGroup->persons[$curPerson->data['pk']])) {
+                $majCurUser = $curGroup->persons[$curPerson->data['pk']];
+                $update = [];
+                $userWP = wp_get_current_user();
+                if ($userWP->user_email != $majCurUser['email'])
+                    $update['user_email'] = $majCurUser['email'];
+                if ($userWP->first_name != $majCurUser['firstname'])
+                    $update['first_name'] = $majCurUser['firstname'];
+                if ($userWP->last_name != $majCurUser['lastname'])
+                    $update['last_name'] = $majCurUser['lastname'];
+                if (!empty($update)) {
+                    $update['ID'] = $userWP->ID;
+                    $res = wp_update_user( $update );
+                    if ( is_wp_error( $res ) ) { // rollback
+                        $error_msg = $res->get_error_message();
+                        $curPerson = new \AccueilALaFerme\User($DB, $curPerson->data['pk'], $userWP->user_email, $userWP->first_name, $userWP->last_name);
+                        header('Location:'.$root.'family');die();
+                    }
                 }
             }
+        if(is_admin() || current_user_can('administrator')) {
+            $url_get_link = empty($_GET['event_id']) ? "?" : "&";
+            if(isset($_GET['user_id']))
+                $url_extension = $url_get_link . "user_id=" . $_GET['user_id'];
+            elseif(isset($_GET['group_id'])) {
+                $url_extension = $url_get_link . "user_id=";
+                foreach($curGroup->persons as $person)
+                    if($person['can_manage'] ==1) {
+                        $url_extension .= $person['pk'];
+                        break;
+                    }
+            }
+            else
+                $url_extension = '';
         }
-        $url = !empty($_GET['event_id']) ? 'event/register?event_id='.$_GET['event_id'] : 'profil';
+        else
+            $url_extension = '';
+
+        $url = (!empty($_GET['event_id']) ? 'event/register?event_id='.$_GET['event_id'] : 'profil') . $url_extension;
         header('Location:'.$root.$url);
         die();
     } catch (Exception $e) {

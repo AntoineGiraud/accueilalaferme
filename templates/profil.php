@@ -5,9 +5,13 @@
  * @package accueilalaferme
  */
 
+$can_admin = is_admin() || current_user_can('administrator');
+
 if(isset($_GET['user_id']))
-    if(is_admin() || current_user_can('administrator'))
-        $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+    if($can_admin) {
+        if($_GET['user_id'] != $curPerson->data['pk'])
+            $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+    }
     else
         \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
 
@@ -81,7 +85,7 @@ get_header();
                                         <td><?= substr($event['start_date'], 0, 10) ?></td>
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
-                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk'].'&user_id='.$curPerson->data['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
+                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk']?><?= ($can_admin && isset($_GET['user_id'])) ? '&user_id='.$curPerson->data['pk'] : "" ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
                                         <td>
                                             <?php if (!empty($register[$event['pk']])): ?>
                                                 <?= implode(', ', array_map(function($d){return '<span title="'.$d['firstname'].' '.$d['lastname']."\n arrivée: ".$d['arrival_date']."\n départ: ".$d['departure_date']."\n".'">'.$d['firstname'].'</span>';}, $register[$event['pk']])) ?>
@@ -104,9 +108,9 @@ get_header();
                             <p>
                                 Remplissez votre famille ou groupe afin de faciliter l'inscriptions aux événements ou l'accès à nos nouvelles.
                             </p>
-                            <p><a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-primary">C'est parti !</a></p>
+                            <p><a href="<?= get_bloginfo('url').'/famille' ?><?= (isset($_GET['user_id']) && ($can_admin)) ? '?user_id=' . $_GET['user_id'] : "" ?>" class="btn btn-primary">C'est parti !</a></p>
                         <?php else: ?>
-                            <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
+                            <h4>Ma famille <a href="<?= get_bloginfo('url').'/famille' ?><?=($can_admin && isset($_GET['user_id'])) ? "?group_id=" . $group_id : "" ?>" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span></a></h4>
                             <table class="table table-bordered table-condensed">
                                 <thead>
                                     <tr>

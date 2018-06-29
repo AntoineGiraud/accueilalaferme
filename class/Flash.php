@@ -18,7 +18,6 @@ class Flash {
     }
     static function setFlashAndRedirect($message, $type='success', $url='profil') {
         global $root;
-        var_dump($url);
         if (strpos($url, 'http')!== 0)
             $url = $root.$url;
         self::setFlash($message, $type);

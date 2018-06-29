@@ -4,6 +4,9 @@
  *
  * @package accueilalaferme
  */
+$can_admin = current_user_can('administrator') || is_admin();
+$url_extension = ($can_admin && isset($_GET['user_id'])) ? (isset($group_id)) ? ("&group_id=" . $group_id) : ("&user_id=" . $curPerson->data['pk']) : "";
+
 global $curPerson;
 if (!empty($_GET['event_id']))
     $event_id = $_GET['event_id']*1;
@@ -17,8 +20,10 @@ else if (strtotime($event['end_date']) < time())
     \AccueilALaFerme\Flash::setFlashAndRedirect("Evénement terminé", 'warning', 'profil');
 if(empty($_GET['user_id']))
     global $curPerson;
-elseif(current_user_can('administrator') || is_admin())
-    $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+elseif($can_admin) {
+    if($_GET['user_id'] != $curPerson->data['pk'])
+        $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+}
 else
     \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
 
@@ -128,16 +133,12 @@ if (!empty($_POST)) {
                 $maj = true;
             }
         }
+
+        $url_extension = $can_admin ? (isset($_GET['user_id']) ? '?user_id='.$_POST['persons']['0']['pk'] : "") : "";
         if ($maj)
-            if(is_admin() || current_user_can('administrator'))
-                \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil?user_id='.$_POST['persons']['0']['pk']);
-            else
-                \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil');
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Sauvegarde effectuée de l'inscription à <code>".$event['name']."</code>", 'success', 'profil' . $url_extension);
         else
-            if(is_admin() || current_user_can('administrator'))
-                \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil?user_id='.$_POST['persons']['0']['pk']);
-            else
-                \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil');
+            \AccueilALaFerme\Flash::setFlashAndRedirect("Pas de mise à jour", 'info', 'profil' . $url_extension);
     } else
         $error_msg = implode('<br>', array_keys($error_msg));
 }
@@ -160,7 +161,7 @@ get_header();
 
                 <form class="form-horizontal" action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                     <fieldset>
-                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk'].'&group_id='.$group_id ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
+                        <legend>Participants <small><a href="<?= get_bloginfo('url').'/famille?event_id='.$event['pk']?><?=$url_extension ?>" class="btn btn-info btn-xs"><?= empty($curGroup)?'Créer groupe/famille':'Editer '.($curGroup->prop['is_family']?'famille':'groupe') ?></a></small></legend>
                         <table class="table table-bordered table-condensed">
                             <thead>
                                 <tr>
