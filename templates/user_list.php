@@ -49,7 +49,7 @@ do_action('sydney_before_content');
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.birthday}} ({{user.age}})</td>
-                    <td><a style="color:black" href="famille?group_id={{user.group_id}}">{{user.was_removed == 1 ? (user.is_family == 1 ? "Famille" : "Groupe" + user.group_name) : ""}}</a></td>
+                    <td><a style="color:black" href="famille?group_id={{user.group_id}}">{{user.was_removed == null ? user.is_family == 1 ? "Famille " : user.is_family==0 ? "Groupe " : "" : ""}}</a></td>
                     <td><a style="color:black" href="profil?user_id={{user.pk}}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 </tr>
             </tbody>
