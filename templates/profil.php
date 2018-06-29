@@ -5,6 +5,12 @@
  * @package accueilalaferme
  */
 
+if(isset($_GET['user_id']))
+    if(is_admin() || current_user_can('administrator'))
+        $curPerson = new \AccueilALaFerme\User($DB, $_GET['user_id'], null);
+    else
+        \AccueilALaFerme\Flash::setFlashAndRedirect("Vous n'avez pas les droits pour éditer d'autres personnes", 'danger', 'profil');
+
 if (!empty($_SESSION['url'])) {
     $url = implode('?', $_SESSION['url']);
     unset($_SESSION['url']);
@@ -49,7 +55,7 @@ get_header();
                 <?php endif ?>
 
 				<div class="page-content">
-                    <h4>Bienvenue <?= $userWP->user_firstname ?> !</h4>
+                    <h4>Bienvenue <?= $curPerson->data['firstname'] ?> !</h4>
                     <p>Vous retrouverez ici votre profil vous permettant de gérer votre famille/compte et de vous inscrire aux évènements de la ferme.</p>
 				</div><!-- .page-content -->
 
@@ -75,7 +81,7 @@ get_header();
                                         <td><?= substr($event['start_date'], 0, 10) ?></td>
                                         <td><?= substr($event['end_date'], 0, 10) ?></td>
                                         <td><?= $event['name'] ?></td>
-                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
+                                        <td ><a style="height: auto;" href="<?= get_bloginfo('url').'/event/register?event_id='.$event['pk'].'&user_id='.$curPerson->data['pk'] ?>" class="btn btn-<?= !empty($register[$event['pk']]) ? 'success':'primary' ?> btn-xs"><?= !empty($register[$event['pk']]) ? "éditer":"s'inscrire" ?></a></td>
                                         <td>
                                             <?php if (!empty($register[$event['pk']])): ?>
                                                 <?= implode(', ', array_map(function($d){return '<span title="'.$d['firstname'].' '.$d['lastname']."\n arrivée: ".$d['arrival_date']."\n départ: ".$d['departure_date']."\n".'">'.$d['firstname'].'</span>';}, $register[$event['pk']])) ?>
@@ -84,6 +90,7 @@ get_header();
                                         <?php if (current_user_can('administrator')): ?>
                                             <td>
                                                 <small><a href="<?= get_bloginfo('url').'/event/guests?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> invités</a></small>
+                                                <small><a href="<?= get_bloginfo('url').'/user_list?event_id='.$event['pk'] ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-list"></span> utilisateurs sans place</a></small>
                                             </td>
                                         <?php endif; ?>
                                     </tr>

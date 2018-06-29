@@ -58,7 +58,7 @@ foreach ($res as $row) {
         $DB->query('UPDATE registration SET will_come = 0 WHERE pk = '.$row['pk']);
 }
 
-get_header();
+    get_header();
     do_action('sydney_before_content'); ?>
 
 	<div id="primary" class="content-area fullwidth" ng-app="app" ng-controller="PageCtrl">
