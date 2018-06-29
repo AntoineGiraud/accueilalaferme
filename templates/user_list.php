@@ -1,8 +1,5 @@
 <?php
 
-global $curPerson;
-$blogUrl = get_bloginfo('url');
-
 if (!is_admin() && !current_user_can('administrator'))
     \AccueilALaFerme\Flash::setFlashAndRedirect("Espace réservé à l'administration", 'warning', 'profil');
 
@@ -50,7 +47,7 @@ do_action('sydney_before_content');
                     <td>{{user.firstname}}</td>
                     <td>{{user.lastname}}</td>
                     <td>{{user.email}}</td>
-                    <td>{{user.telephone}}</td>
+                    <td>{{user.phone}}</td>
                     <td>{{user.birthday}} ({{user.age}})</td>
                     <td><a style="color:black" href="famille?group_id={{user.group_id}}">{{user.was_removed == 1 ? (user.is_family == 1 ? "Famille" : "Groupe" + user.group_name) : ""}}</a></td>
                     <td><a style="color:black" href="profil?user_id={{user.pk}}"><span class="glyphicon glyphicon-pencil"></span></a></td>
